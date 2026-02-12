@@ -916,15 +916,26 @@ const productsWithSpecs = products.map((product) => ({
   {
     id: 49,
     layout: 'content',
-    title: "HTTP Status Codes Recap",
+    title: "HTTP Status Code Cheat Sheet",
     content: [
-      "2xx: Success (200 OK, 201 Created)",
-      "4xx: Client Error (400 Bad Request, 401 Unauthorized, 404 Not Found)",
-      "5xx: Server Error (500 Internal Server Error)"
+      "200 OK – Generic success response.",
+      "201 Created – New resource successfully created.",
+      "204 No Content – Success, but no response body.",
+      "301 Moved Permanently – Resource moved to a new URL.",
+      "304 Not Modified – Client can use cached version.",
+      "400 Bad Request – Invalid request/parameters from client.",
+      "401 Unauthorized – Authentication failed or missing.",
+      "403 Forbidden – Authenticated but not allowed to access resource.",
+      "404 Not Found – Resource does not exist.",
+      "409 Conflict – Request conflicts with current state (e.g., duplicate).",
+      "422 Unprocessable Entity – Validation/semantic error in request body.",
+      "429 Too Many Requests – Client hit rate limit.",
+      "500 Internal Server Error – Unexpected server-side error.",
+      "503 Service Unavailable – Server temporarily overloaded or down for maintenance."
     ],
-    notes: "Your API communicates with the frontend via these codes. If a user tries to login with a wrong password and you send a '200 OK' with an error message text, you are breaking the standard. Use '401 Unauthorized'. The status code tells the story; the JSON body tells the details.",
-    takeaway: "Use correct codes.",
-    duration: 2
+    notes: "Use this as your mental map when building and testing APIs. 2xx means 'success' (200 for generic success, 201 for creates, 204 for no body). 3xx is about redirects and caching (301, 304). 4xx is always the client's fault (400 bad input, 401/403 auth issues, 404 not found, 409 conflict, 422 validation, 429 rate limiting). 5xx is the server's fault (500 generic crash, 503 when the server is down or overloaded). When in doubt, ask: Is this a client mistake or a server mistake? Then pick a code from the right family.",
+    takeaway: "Pick status codes intentionally based on success (2xx), client errors (4xx), and server errors (5xx).",
+    duration: 4
   },
   {
     id: 50,
@@ -1672,5 +1683,5 @@ export default router;`,
     takeaway: "You are a Full Stack Developer.",
     duration: 1,
     visualDesc: "Q&A Session"
-  }
+  },
 ];
