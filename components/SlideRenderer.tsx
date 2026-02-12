@@ -195,38 +195,122 @@ const TimelineLayout: React.FC<Props> = ({ slide }) => (
 
 const TwoColumnLayout: React.FC<Props> = ({ slide }) => (
   <SlideWrapper slide={slide}>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 h-full">
-      {/* Left Column */}
-      <div className="p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl bg-surface-100 border border-surface-300 overflow-y-auto">
-        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 font-display border-b border-surface-300 pb-2 text-txt-900">
-          {slide.columns?.left.title}
-        </h3>
-        {Array.isArray(slide.columns?.left.content) ? (
-          <ul className="space-y-1.5 sm:space-y-2 md:space-y-3">
-            {slide.columns?.left.content.map((item, idx) => (
-              <li key={idx} className="text-xs sm:text-sm md:text-base text-txt-700">{item}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-xs sm:text-sm md:text-base text-txt-700">{slide.columns?.left.content}</p>
-        )}
+    <div className="space-y-4 sm:space-y-5 md:space-y-6 h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+        {/* Left Column */}
+        <div className="p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl bg-surface-100 border border-surface-300 overflow-y-auto">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 font-display border-b border-surface-300 pb-2 text-txt-900">
+            {slide.columns?.left.title}
+          </h3>
+          {Array.isArray(slide.columns?.left.content) ? (
+            <ul className="space-y-1.5 sm:space-y-2 md:space-y-3">
+              {slide.columns?.left.content.map((item, idx) => (
+                <li key={idx} className="text-xs sm:text-sm md:text-base text-txt-700">{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs sm:text-sm md:text-base text-txt-700">{slide.columns?.left.content}</p>
+          )}
+        </div>
+
+        {/* Right Column */}
+        <div className="p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl bg-surface-100 border border-surface-300 overflow-y-auto">
+          <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 font-display border-b border-surface-300 pb-2 text-txt-900">
+            {slide.columns?.right.title}
+          </h3>
+          {Array.isArray(slide.columns?.right.content) ? (
+            <ul className="space-y-1.5 sm:space-y-2 md:space-y-3">
+              {slide.columns?.right.content.map((item, idx) => (
+                <li key={idx} className="text-xs sm:text-sm md:text-base text-txt-700">{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs sm:text-sm md:text-base text-txt-700">{slide.columns?.right.content}</p>
+          )}
+        </div>
       </div>
 
-      {/* Right Column */}
-      <div className="p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl bg-surface-100 border border-surface-300 overflow-y-auto">
-        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-2 sm:mb-3 md:mb-4 font-display border-b border-surface-300 pb-2 text-txt-900">
-          {slide.columns?.right.title}
-        </h3>
-        {Array.isArray(slide.columns?.right.content) ? (
-          <ul className="space-y-1.5 sm:space-y-2 md:space-y-3">
-            {slide.columns?.right.content.map((item, idx) => (
-              <li key={idx} className="text-xs sm:text-sm md:text-base text-txt-700">{item}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-xs sm:text-sm md:text-base text-txt-700">{slide.columns?.right.content}</p>
-        )}
-      </div>
+      {/* Extra visual specifically for the Node.js intro slide */}
+      {slide.id === 11 && (
+        <div className="mt-1 sm:mt-2 md:mt-3">
+          <h3 className="text-xs sm:text-sm md:text-base font-semibold text-txt-500 uppercase tracking-widest mb-2 sm:mb-3">
+            Node.js Mental Model
+          </h3>
+          {/* Desktop / large: horizontal flow */}
+          <div className="hidden md:flex items-center justify-between gap-4 lg:gap-6">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-32 h-20 lg:w-40 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Cpu className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">Your JS Code</span>
+                  <span className="text-[10px] text-txt-500">app.js / server.mjs</span>
+                </div>
+              </div>
+            </div>
+
+            <ArrowRight className="w-6 h-6 text-brand-red flex-shrink-0" />
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-36 h-20 lg:w-44 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Server className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">Node.js Runtime</span>
+                  <span className="text-[10px] text-txt-500">V8 + libuv + APIs</span>
+                </div>
+              </div>
+            </div>
+
+            <ArrowRight className="w-6 h-6 text-brand-red flex-shrink-0" />
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-32 h-20 lg:w-40 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Database className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">OS & Resources</span>
+                  <span className="text-[10px] text-txt-500">File system, network, DB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile / tablet: vertical flow */}
+          <div className="md:hidden space-y-3 sm:space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Cpu className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">Your JavaScript File</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">The code you write</p>
+              </div>
+            </div>
+
+            <ArrowRight className="w-4 h-4 text-brand-red rotate-90 mx-6" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Server className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">Node.js Runtime</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Executes JS and handles async I/O</p>
+              </div>
+            </div>
+
+            <ArrowRight className="w-4 h-4 text-brand-red rotate-90 mx-6" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Database className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">System & Data</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Filesystem, network, databases, APIs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   </SlideWrapper>
 );
@@ -268,12 +352,122 @@ const ContentLayout: React.FC<Props> = ({ slide }) => (
 
 const DiagramLayout: React.FC<Props> = ({ slide }) => (
   <SlideWrapper slide={slide}>
-    {slide.content && <BulletList items={slide.content} />}
-    {slide.code && (
-      <div className="mt-3 sm:mt-4 md:mt-5">
-        <CodeBlock code={slide.code} />
-      </div>
-    )}
+    <div className="space-y-4 sm:space-y-5 md:space-y-6">
+      {slide.content && <BulletList items={slide.content} />}
+
+      {/* Special visual flow for Request-Response Cycle slide */}
+      {slide.id === 8 && (
+        <div className="mt-1 sm:mt-2 md:mt-3">
+          <h3 className="text-xs sm:text-sm md:text-base font-semibold text-txt-500 uppercase tracking-widest mb-3">
+            Visual Flow
+          </h3>
+
+          {/* Desktop / large: horizontal flow */}
+          <div className="hidden md:flex items-center justify-between gap-4 lg:gap-6 xl:gap-8">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-28 h-20 lg:w-32 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Cpu className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">Client</span>
+                  <span className="text-[10px] text-txt-500">Browser / React UI</span>
+                </div>
+              </div>
+            </div>
+
+            <ArrowRight className="w-6 h-6 text-brand-red flex-shrink-0" />
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-32 h-20 lg:w-40 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Server className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">Node / Express</span>
+                  <span className="text-[10px] text-txt-500">API Endpoint</span>
+                </div>
+              </div>
+            </div>
+
+            <ArrowRight className="w-6 h-6 text-brand-red flex-shrink-0" />
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-28 h-20 lg:w-32 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Database className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">MongoDB</span>
+                  <span className="text-[10px] text-txt-500">Data Store</span>
+                </div>
+              </div>
+            </div>
+
+            <ArrowRight className="w-6 h-6 text-brand-red flex-shrink-0" />
+
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center w-32 h-20 lg:w-40 lg:h-24 rounded-xl bg-surface-100 border border-surface-300 shadow-sm">
+                <div className="flex flex-col items-center gap-1">
+                  <Cpu className="w-6 h-6 text-brand-red" />
+                  <span className="text-xs font-semibold text-txt-900">Client</span>
+                  <span className="text-[10px] text-txt-500">Renders Response</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile / tablet: vertical flow */}
+          <div className="md:hidden space-y-3 sm:space-y-4 mt-1">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Cpu className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">Client (Browser)</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Sends HTTP Request</p>
+              </div>
+            </div>
+
+            <ArrowRight className="w-4 h-4 text-brand-red rotate-90 mx-6" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Server className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">Node / Express</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Handles Request &amp; talks to DB</p>
+              </div>
+            </div>
+
+            <ArrowRight className="w-4 h-4 text-brand-red rotate-90 mx-6" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Database className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">MongoDB</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Returns data to API</p>
+              </div>
+            </div>
+
+            <ArrowRight className="w-4 h-4 text-brand-red rotate-90 mx-6" />
+
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-surface-100 border border-surface-300 flex items-center justify-center">
+                <Cpu className="w-4 h-4 text-brand-red" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-semibold text-txt-900">Client UI</p>
+                <p className="text-[10px] sm:text-xs text-txt-500">Renders Response Data</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {slide.code && (
+        <div className="mt-3 sm:mt-4 md:mt-5">
+          <CodeBlock code={slide.code} />
+        </div>
+      )}
+    </div>
   </SlideWrapper>
 );
 

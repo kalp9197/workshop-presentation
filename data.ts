@@ -13,24 +13,6 @@ export const slides: SlideData[] = [
     visualDesc: "Day 1 & Day 2 | 5 Hours"
   },
   {
-    id: 2,
-    layout: 'timeline',
-    title: "The Workshop Roadmap",
-    content: [
-      "Phase 1: MERN Architecture (30m)",
-      "Phase 2: Node.js Internals (45m)",
-      "Phase 3: Express & REST APIs (45m)",
-      "Phase 4: MongoDB & NoSQL Design (60m)",
-      "Phase 5: Security & Auth (45m)",
-      "Phase 6: React.js Deep Dive (60m)",
-      "Phase 7: Big Data Strategies (60m)",
-      "Phase 8: Deployment & Career (30m)"
-    ],
-    notes: "We have a packed schedule. Day 1 focuses on the invisible parts—the backend, database, and security. Day 2 brings it to life with React and visualization. We will end with Big Data techniques usually reserved for senior engineering interviews.",
-    takeaway: "From zero to production architecture in 2 Days.",
-    duration: 3
-  },
-  {
     id: 3,
     layout: 'two-column',
     title: "Who Is This For?",
@@ -100,41 +82,9 @@ export const slides: SlideData[] = [
       "R - React.js (Frontend Library)",
       "N - Node.js (Runtime Environment)"
     ],
-    notes: "It's not just four technologies; it's a unified language stack. JavaScript everywhere.",
+    notes: "It's not just four technologies; it's a unified JavaScript stack that lets you use the SAME language end-to-end. MongoDB stores JSON-like documents, Express runs on top of Node to expose HTTP APIs, and React lives in the browser to render UI. When a user clicks a button in React, it talks (via HTTP) to Express/Node, which reads/writes data in MongoDB and sends JSON back. The big mental model: think in JavaScript for data, APIs, and UI instead of switching between SQL, PHP, and a separate frontend language.",
     takeaway: "One language (JS) rules the entire stack.",
     duration: 3
-  },
-  {
-    id: 7,
-    layout: 'two-column',
-    title: "The Old Way vs. The MERN Way",
-    columns: {
-      left: {
-        title: "LAMP Stack (Legacy)",
-        content: [
-          "• Linux (OS)",
-          "• Apache (Server)",
-          "• MySQL (SQL Database)",
-          "• PHP (Language)",
-          "Result: Context switching between SQL, PHP, and JS."
-        ],
-        color: "text-gray-400"
-      },
-      right: {
-        title: "MERN Stack (Modern)",
-        content: [
-          "• Node (Runtime)",
-          "• Express (Server)",
-          "• MongoDB (JSON DB)",
-          "• React (JS UI)",
-          "Result: JSON flows from DB to UI without translation."
-        ],
-        color: "text-cyan-400"
-      }
-    },
-    notes: "Context switching kills productivity. In MERN, a database record is a JSON object. The API returns a JSON object. React renders a JSON object. No mapping required.",
-    takeaway: "MERN eliminates the 'translation tax' between layers.",
-    duration: 4
   },
   {
     id: 8,
@@ -197,20 +147,23 @@ export const slides: SlideData[] = [
       left: {
         title: "It IS...",
         content: [
-          "• A JavaScript Runtime",
-          "• Built on Chrome's V8 Engine",
-          "• Asynchronous",
-          "• Event-Driven"
+          "• A JavaScript Runtime — runs JS outside the browser (on the server)",
+          "• Built on Chrome's V8 Engine — fast, optimized Just-In-Time compilation",
+          "• Asynchronous — uses callbacks/promises instead of waiting for I/O to finish",
+          "• Event-Driven — reacts to incoming events (requests, timers, messages)",
+          "• Single-threaded for your JS code, backed by an efficient event loop",
+          "• Ideal for I/O-heavy workloads like APIs, streaming and real-time apps"
         ],
         color: "text-green-400"
       },
       right: {
         title: "It is NOT...",
         content: [
-          "• A Framework",
-          "• A Programming Language",
-          "• Multi-threaded (by default)",
-          "• For CPU-intensive tasks"
+          "• A Framework — Express, NestJS etc. are built *on top* of Node.js",
+          "• A Programming Language — it's JavaScript running inside a host environment",
+          "• Multi-threaded (by default) — heavy CPU work can block the event loop",
+          "• Designed for CPU‑intensive tasks like video encoding or ML training",
+          "• The best choice when raw number‑crunching performance is your main goal"
         ],
         color: "text-red-400"
       }
@@ -229,23 +182,9 @@ export const slides: SlideData[] = [
       "Node.js wraps V8 with C++ bindings (libuv).",
       "This allows JS to do 'C++ things' like reading files."
     ],
-    notes: "Without V8, Node is nothing. Ryan Dahl (creator) essentially ripped the engine out of Chrome and put it in a server.",
+    notes: "Without V8, Node is nothing. Ryan Dahl (creator) essentially ripped the engine out of Chrome and put it in a server. Under the hood, libuv provides an event loop: your JS runs on a single thread, hands off slow I/O (files, network, timers) to the OS, and the event loop pulls completed work back into the call stack. This is why Node feels 'fast'—it never blocks on I/O, it just keeps looping through events.",
     takeaway: "Node.js = V8 + C++ APIs.",
     duration: 4
-  },
-  {
-    id: 13,
-    layout: 'diagram',
-    title: "Blocking vs Non-Blocking I/O",
-    content: [
-      "Blocking (PHP/Python/Ruby default):",
-      "Request 1 comes -> Thread 1 works -> Thread 1 waits for DB -> Thread 1 replies.",
-      "Non-Blocking (Node.js):",
-      "Request 1 comes -> Main Thread asks DB -> Main Thread takes Request 2 -> DB replies -> Main Thread replies to Req 1."
-    ],
-    notes: "Imagine a waiter. Blocking waiter takes an order, waits for the chef to cook it, brings it, then takes the next order. Non-blocking waiter takes order, gives ticket to chef, takes next order immediately.",
-    takeaway: "Node.js doesn't wait.",
-    duration: 5
   },
   {
     id: 14,

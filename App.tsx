@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { slides } from './data';
 import SlideRenderer from './components/SlideRenderer';
-import { ChevronLeft, ChevronRight, BookOpen, Clock, Lightbulb, MessageSquareText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen, Lightbulb, MessageSquareText } from 'lucide-react';
 
 const App: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -47,20 +47,20 @@ const App: React.FC = () => {
           <SlideRenderer slide={currentSlide} />
         </div>
 
-        {/* Presenter Guide Sidebar — light theme */}
+        {/* Session Guide Sidebar — light theme */}
         {showNotes && (
           <div className="w-full sm:w-2/5 md:w-1/3 lg:w-1/4 bg-surface-100 border-l border-surface-300 overflow-y-auto flex flex-col">
             {/* Header */}
             <div className="p-3 sm:p-4 border-b border-surface-300 flex items-center gap-2 flex-shrink-0">
               <BookOpen className="w-4 h-4 text-brand-red" />
-              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-txt-700">Presenter Guide</h3>
+              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-txt-700">Session Guide</h3>
             </div>
 
-            {/* Teaching Notes */}
+            {/* Speaker Notes */}
             <div className="p-3 sm:p-4 flex-1">
               <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <MessageSquareText className="w-3.5 h-3.5 text-brand-red flex-shrink-0" />
-                <p className="text-[10px] sm:text-xs text-brand-red font-bold uppercase tracking-wider">Teaching Notes</p>
+                <p className="text-[10px] sm:text-xs text-brand-red font-bold uppercase tracking-wider">Notes</p>
               </div>
               <p className="text-txt-700 text-xs sm:text-sm md:text-base leading-relaxed whitespace-pre-wrap">
                 {currentSlide.notes}
@@ -78,15 +78,6 @@ const App: React.FC = () => {
               )}
             </div>
 
-            {/* Duration Footer */}
-            <div className="p-3 sm:p-4 border-t border-surface-300 flex-shrink-0">
-              <div className="bg-surface-200 p-2.5 sm:p-3 rounded-lg flex items-center justify-between">
-                <p className="text-[10px] sm:text-xs text-txt-400 uppercase tracking-wider">Estimated Time</p>
-                <div className="flex items-center text-brand-red font-mono text-sm sm:text-base font-bold">
-                  <Clock className="w-3.5 h-3.5 mr-1.5" /> {currentSlide.duration} min
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </main>
@@ -114,7 +105,7 @@ const App: React.FC = () => {
           <button
             onClick={() => setShowNotes(!showNotes)}
             className={`p-1 sm:p-1.5 md:p-2 rounded hover:bg-surface-200 transition-colors ${showNotes ? 'text-brand-red' : 'text-txt-400'}`}
-            title="Toggle Presenter Guide (S)"
+            title="Toggle Session Guide (S)"
           >
             <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
