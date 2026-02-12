@@ -1807,10 +1807,10 @@ pm2 logs`,
     id: 105,
     layout: 'title',
     title: "Thank You",
-    subtitle: "Now go build something amazing.",
+    subtitle: "A Workshop by Technotery Business Solutions",
     notes: "Thanks for sticking through 5 hours of dense technical content. You are now equipped to build scalable systems.",
     takeaway: "You are a Full Stack Engineer.",
     duration: 1,
-    visualDesc: "Workshop Complete"
+    visualDesc: "technotery.com | Workshop Complete"
   }
 ];

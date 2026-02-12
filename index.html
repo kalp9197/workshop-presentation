@@ -13,18 +13,23 @@
         theme: {
           extend: {
             colors: {
-              navy: {
-                900: '#0A1628', // Primary Background
-                800: '#15233b',
+              brand: {
+                red: '#EE3B24',
+                redDark: '#CC2D18',
+                redLight: '#FFF0EE',
               },
-              cyan: {
-                400: '#00D4FF', // Accent Primary
+              surface: {
+                50: '#FFFFFF',
+                100: '#FAFAFA',
+                200: '#F3F4F6',
+                300: '#E5E7EB',
+                400: '#D1D5DB',
               },
-              neon: {
-                green: '#39FF14', // Accent Secondary (Code)
-              },
-              coral: {
-                500: '#FF6B35', // Warnings
+              txt: {
+                900: '#1F2937',
+                700: '#374151',
+                500: '#6B7280',
+                400: '#9CA3AF',
               }
             },
             fontFamily: {
@@ -38,22 +43,22 @@
     </script>
     <style>
       body {
-        background-color: #0A1628;
-        color: white;
+        background-color: #FFFFFF;
+        color: #1F2937;
       }
-      /* Custom scrollbar for speaker notes */
+      /* Custom scrollbar — light theme */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0A1628;
+        background: #F3F4F6;
       }
       ::-webkit-scrollbar-thumb {
-        background: #1e293b;
-        border-radius: 4px;
+        background: #D1D5DB;
+        border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #334155;
+        background: #9CA3AF;
       }
     </style>
   <script type="importmap">
