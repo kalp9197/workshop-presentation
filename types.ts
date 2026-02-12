@@ -1,11 +1,13 @@
-export type LayoutType = 
-  | 'title' 
-  | 'section' 
-  | 'content' 
-  | 'two-column' 
-  | 'code' 
-  | 'diagram' 
-  | 'timeline';
+export type LayoutType =
+  | 'title'
+  | 'section'
+  | 'content'
+  | 'two-column'
+  | 'code'
+  | 'diagram'
+  | 'timeline'
+  | 'roadmap'
+  | 'presenters';
 
 export interface SlideData {
   id: number;
@@ -23,4 +25,12 @@ export interface SlideData {
   takeaway: string;
   duration: number; // In minutes
   sectionTitle?: string; // For section breaks
+   presenters?: {
+    name: string;
+    title?: string;
+    experience?: string;
+    bio: string;
+    photoUrl?: string;
+    linkedin?: string;
+  }[];
 }

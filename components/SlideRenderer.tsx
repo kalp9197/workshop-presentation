@@ -1,6 +1,6 @@
 import React from 'react';
 import { SlideData } from '../types';
-import { Database, Server, Cpu, ArrowRight } from 'lucide-react';
+import { Database, Server, Cpu, ArrowRight, Linkedin } from 'lucide-react';
 
 interface Props {
   slide: SlideData;
@@ -18,6 +18,14 @@ const LogoWatermark: React.FC = () => (
     />
   </div>
 );
+
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('')
+    .slice(0, 2);
 
 // ─── Shared Components ─────────────────────────────────────────
 
@@ -119,17 +127,91 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
     </div>
 
     {/* Technotery Branding */}
-    <div className="absolute bottom-3 sm:bottom-5 md:bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10">
-      <span className="text-[9px] sm:text-[10px] md:text-xs text-txt-400 uppercase tracking-[0.2em] mb-1">Presented by</span>
-      <a href="https://technotery.com/" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+    <div className="absolute bottom-6 sm:bottom-8 md:bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10">
+      <span className="text-[11px] sm:text-sm md:text-base text-txt-400 uppercase tracking-[0.28em]">
+        Presented by
+      </span>
+      <a
+        href="https://technotery.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:opacity-90 transition-opacity"
+      >
         <img
           src="/assets/Technotery logo - Transparent.png"
           alt="Technotery Business Solutions"
-          className="h-5 sm:h-6 md:h-8 opacity-60 hover:opacity-100 transition-opacity"
+          className="h-12 sm:h-16 md:h-22 lg:h-28 opacity-90 hover:opacity-100 transition-opacity"
         />
       </a>
     </div>
   </div>
+);
+
+// ─── Layout: Presenters ────────────────────────────────────────
+
+const PresentersLayout: React.FC<Props> = ({ slide }) => (
+  <SlideWrapper slide={slide}>
+    <div className="h-full flex flex-col justify-center">
+      <div className="flex flex-wrap justify-center gap-5 px-4 max-w-6xl mx-auto">
+        {slide.presenters?.map((presenter) => (
+          <div
+            key={presenter.name}
+            className="group relative bg-white rounded-2xl p-4 shadow-sm border border-surface-200 hover:shadow-xl hover:-translate-y-1 hover:border-brand-red/20 transition-all duration-300 flex flex-col w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]"
+          >
+            {/* LinkedIn Icon (Top Right) */}
+            {presenter.linkedin && (
+              <a
+                href={presenter.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-surface-50 text-txt-400 hover:text-[#0077b5] hover:bg-[#0077b5]/10 transition-colors"
+                title="View LinkedIn Profile"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            )}
+
+            {/* Decorative gradient blob */}
+            <div className="absolute top-0 right-0 -mt-8 -mr-8 w-24 h-24 bg-gradient-to-br from-brand-red/5 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <div className="flex flex-col items-center text-center relative z-10">
+              <div className="relative mb-3">
+                {presenter.photoUrl ? (
+                  <img
+                    src={presenter.photoUrl}
+                    alt={presenter.name}
+                    className="w-20 h-20 rounded-full object-cover object-top border-4 border-white shadow-md ring-1 ring-surface-200 group-hover:scale-105 group-hover:ring-brand-red/20 transition-all duration-300"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-surface-100 flex items-center justify-center text-xl font-bold text-brand-red border-4 border-white shadow-md ring-1 ring-surface-200 group-hover:scale-105 transition-transform duration-300">
+                    {getInitials(presenter.name)}
+                  </div>
+                )}
+              </div>
+              
+              <div className="w-full mb-3">
+                <h3 className="text-lg font-bold text-txt-900 leading-tight group-hover:text-brand-red transition-colors">
+                  {presenter.name}
+                </h3>
+                <p className="text-[10px] font-semibold text-txt-500 mt-0.5 uppercase tracking-wide">
+                  {presenter.title}
+                </p>
+                 {presenter.experience && (
+                  <div className="inline-flex items-center mt-1.5 px-2.5 py-0.5 rounded-full bg-surface-100 text-[9px] text-txt-600 font-medium border border-surface-200">
+                    {presenter.experience}
+                  </div>
+                )}
+              </div>
+
+              <p className="text-xs text-txt-600 leading-relaxed line-clamp-3">
+                {presenter.bio}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </SlideWrapper>
 );
 
 // ─── Layout: Section ────────────────────────────────────────
@@ -192,6 +274,88 @@ const TimelineLayout: React.FC<Props> = ({ slide }) => (
 );
 
 // ─── Layout: Two Column ────────────────────────────────────────
+
+// ─── Layout: Two Column ────────────────────────────────────────
+
+const RoadmapLayout: React.FC<Props> = ({ slide }) => (
+  <SlideWrapper slide={slide}>
+    <div className="h-full flex flex-col justify-center py-4 sm:py-6 md:py-8 lg:py-10">
+      <div className="relative max-w-5xl mx-auto w-full">
+        {/* Connecting Line */}
+        <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-green-400/30 via-brand-red/30 to-cyan-400/30 -translate-y-1/2 hidden md:block rounded-full"></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 relative z-10">
+          {/* Part 1: The Foundation */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+            <div className="relative bg-surface-50 border border-surface-200 p-6 sm:p-8 rounded-2xl shadow-xl transform group-hover:-translate-y-1 transition duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-green-400/10 flex items-center justify-center text-green-500 shadow-inner">
+                  <Cpu className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-green-500 uppercase tracking-widest">Phase 01</span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-txt-900 font-display">{slide.columns?.left.title}</h3>
+                </div>
+              </div>
+              <ul className="space-y-4">
+                {(slide.columns?.left.content as string[]).map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-3 group/item">
+                    <div className="w-6 h-6 rounded-full bg-green-400/10 flex items-center justify-center text-[10px] font-bold text-green-600 border border-green-400/20 group-hover/item:bg-green-400 group-hover/item:text-white transition-colors">
+                      {idx + 1}
+                    </div>
+                    <span className="text-sm sm:text-base text-txt-700 font-medium group-hover/item:text-txt-900 transition-colors">
+                      {item.replace(/^\d+\.\s*/, '')}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 pt-6 border-t border-surface-200">
+               
+              </div>
+            </div>
+          </div>
+
+          {/* Part 2: The Application */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-cyan-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+            <div className="relative bg-surface-50 border border-surface-200 p-6 sm:p-8 rounded-2xl shadow-xl transform group-hover:-translate-y-1 transition duration-300">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-cyan-400/10 flex items-center justify-center text-cyan-500 shadow-inner">
+                  <Server className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest">Phase 02</span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-txt-900 font-display">{slide.columns?.right.title}</h3>
+                </div>
+              </div>
+              <ul className="space-y-4">
+                {(slide.columns?.right.content as string[]).map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-3 group/item">
+                    <div className="w-6 h-6 rounded-full bg-cyan-400/10 flex items-center justify-center text-[10px] font-bold text-cyan-600 border border-cyan-400/20 group-hover/item:bg-cyan-400 group-hover/item:text-white transition-colors">
+                      {idx + 4}
+                    </div>
+                    <span className="text-sm sm:text-base text-txt-700 font-medium group-hover/item:text-txt-900 transition-colors">
+                      {item.replace(/^\d+\.\s*/, '')}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 pt-6 border-t border-surface-200">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Center Badge */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex w-16 h-16 rounded-full bg-white border-4 border-surface-100 shadow-2xl items-center justify-center z-20">
+          <ArrowRight className="w-8 h-8 text-brand-red" />
+        </div>
+      </div>
+    </div>
+  </SlideWrapper>
+);
 
 const TwoColumnLayout: React.FC<Props> = ({ slide }) => (
   <SlideWrapper slide={slide}>
@@ -477,12 +641,16 @@ const SlideRenderer: React.FC<Props> = ({ slide }) => {
   switch (slide.layout) {
     case 'title':
       return <TitleLayout slide={slide} />;
+    case 'presenters':
+      return <PresentersLayout slide={slide} />;
     case 'section':
       return <SectionLayout slide={slide} />;
     case 'timeline':
       return <TimelineLayout slide={slide} />;
     case 'two-column':
       return <TwoColumnLayout slide={slide} />;
+    case 'roadmap':
+      return <RoadmapLayout slide={slide} />;
     case 'code':
       return <CodeLayout slide={slide} />;
     case 'diagram':

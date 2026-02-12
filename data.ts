@@ -13,8 +13,59 @@ export const slides: SlideData[] = [
     visualDesc: "Technotery Workshop | 5 Hours"
   },
   {
+    id: 0,
+    layout: 'presenters',
+    title: "Meet Your Instructors",
+    subtitle: "Real-world engineers behind this workshop",
+    presenters: [
+      {
+        name: "Vishv Unjiya",
+        title: "Associate Software Engineer, Technotery",
+        experience: "4.5+ years of experience",
+        bio: "Full-stack engineer at Technotery focused on building scalable web applications and mentoring teams across the JavaScript and MERN ecosystem.",
+        photoUrl: "/assets/Vishv Unjiya.png",
+        linkedin: "https://www.linkedin.com/in/vishv-unjiya-a49717220/"
+      },
+      {
+        name: "Hitesh Nathani",
+        title: "Frontend Developer (React & Next.js)",
+        experience: "2+ years of experience",
+        bio: "Frontend specialist with a strong focus on React, Next.js, and modern TypeScript-based tooling, crafting responsive, production-grade user interfaces.",
+        photoUrl: "/assets/Hitesh.jpg",
+        linkedin: "https://www.linkedin.com/in/hitesh-nathani-06a803237/"
+      },
+      {
+        name: "Kalp Patel",
+        title: "Full Stack JavaScript Engineer",
+        experience: "2 years of experience",
+        bio: "Full-stack JavaScript engineer working with the MERN stack and data-driven dashboards, passionate about connecting theory with real-world system design.",
+        photoUrl: "/assets/Kalp Patel.png",
+        linkedin: "https://www.linkedin.com/in/kalp-patel-93526425b/"
+      },
+      {
+        name: "Jainil Patel",
+        title: "MERN Developer & Data Enthusiast",
+        experience: "2 years of experience",
+        bio: "MERN-focused developer and data enthusiast who enjoys turning complex product and analytics requirements into simple, reliable backend and UI implementations.",
+        photoUrl: "/assets/Jainil Gautambhai Patel.jpeg",
+        linkedin: "https://www.google.com/search?q=https://www.linkedin.com/in/jainilpatel14/"
+      },
+      {
+        name: "Hitarth Sharma",
+        title: "Full Stack & Frontend Engineer",
+        experience: "2 years of experience",
+        bio: "Frontend-leaning full-stack engineer experienced with React, Node.js, and modern cloud APIs, with a strong focus on developer experience and teaching.",
+        photoUrl: "/assets/Hitarth_sharma.jpeg",
+        linkedin: "https://www.linkedin.com/in/hitarthh/"
+      }
+    ],
+    notes: "Use this slide to humanize the session before diving into deep technical content. Briefly introduce each instructor: name, focus area (frontend, backend, full stack), and what they will emphasize during the workshop. Keep the tone light and energetic, emphasizing that everyone here actively ships production code and will connect concepts to real-world systems.",
+    takeaway: "Learners know who is guiding them and the strengths each instructor brings.",
+    duration: 3
+  },
+  {
     id: 2,
-    layout: 'two-column',
+    layout: 'roadmap',
     title: "The Workshop Roadmap",
     columns: {
       left: {
@@ -23,17 +74,15 @@ export const slides: SlideData[] = [
           "1. Modern JavaScript (ES6+)",
           "2. Asynchronous Programming",
           "3. Node.js Internals",
-          "4. Express.js Architecture"
         ],
         color: "text-green-400"
       },
       right: {
         title: "Part 2: The Application",
         content: [
+          "4. Express.js Architecture",
           "5. MongoDB & Database Design",
           "6. API Security & Testing",
-          "7. React Frontend Integration",
-          "8. Handling Scale & Big Data"
         ],
         color: "text-cyan-400"
       }
