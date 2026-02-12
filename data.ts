@@ -208,26 +208,6 @@ console.log('3. End');
     duration: 4
   },
   {
-    id: 15,
-    layout: 'two-column',
-    title: "Global Objects in Node",
-    columns: {
-      left: {
-        title: "Browser Globals",
-        content: ["window", "document", "navigator", "localStorage"],
-        color: "text-gray-400"
-      },
-      right: {
-        title: "Node Globals",
-        content: ["global", "process", "__dirname", "module.exports"],
-        color: "text-cyan-400"
-      }
-    },
-    notes: "You can't access 'window' in Node. It doesn't exist. You have 'process' instead to talk to the OS.",
-    takeaway: "Know your environment context.",
-    duration: 3
-  },
-  {
     id: 16,
     layout: 'code',
     title: "Modules: CommonJS vs ES6",
