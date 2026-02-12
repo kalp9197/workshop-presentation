@@ -572,8 +572,494 @@ app.get('/search', (req, res) => {
     takeaway: "Organize for scale.",
     duration: 4
   },
+  
   {
     id: 32,
+    layout: 'section',
+    title: "Module 4",
+    subtitle: "MongoDB & Mongoose",
+    sectionTitle: "Data Persistence",
+    notes: "The server is now running and can respond to requests, but it has amnesia—once you restart it, everything in memory is gone. To build real applications, we need a persistent data store so user accounts, products, and analytics survive restarts. Use this moment to transition from 'stateless logic' to 'stateful data' and introduce MongoDB as the permanent memory for the system.",
+    takeaway: "Database Layer",
+    duration: 0
+  },
+
+  // --- MODULE 5: MONGODB & MONGOOSE (Slides 36-45) ---
+  {
+    id: 33,
+    layout: 'two-column',
+    title: "SQL vs NoSQL",
+    columns: {
+      left: {
+        title: "SQL (Relational)",
+        content: [
+          "• Tables & Rows",
+          "• Fixed Schema",
+          "• Good for complex relationships",
+          "• Vertical Scaling (Bigger Server)"
+        ],
+        color: "text-gray-400"
+      },
+      right: {
+        title: "NoSQL (MongoDB)",
+        content: [
+          "• Collections & Documents",
+          "• Flexible Schema",
+          "• Good for Big Data / Rapid Dev",
+          "• Horizontal Scaling (More Servers)"
+        ],
+        color: "text-green-400"
+      }
+    },
+    notes: "MongoDB is a NoSQL database: instead of tables and rows, it uses collections and JSON-like documents stored as BSON (Binary JSON). That means the data in your database looks almost exactly like the JavaScript objects you already work with in Node and React, reducing the 'impedance mismatch' between code and storage. Use this slide to contrast the stricter, schema-first world of SQL with the more flexible, iterative development style MongoDB enables for many modern web apps.",
+    takeaway: "JSON in the Database.",
+    duration: 3
+  },
+  {
+    id: 34,
+    layout: 'content',
+    title: "MongoDB Atlas",
+    content: [
+      "We do not install MongoDB on our laptop.",
+      "We use the Cloud.",
+      "1. Create Account on MongoDB Atlas.",
+      "2. Create a Cluster (Free Tier).",
+      "3. Whitelist IP Address.",
+      "4. Get Connection String (URI)."
+    ],
+    notes: "In 2024+ most teams avoid babysitting database servers on their laptops or VPSs if they can. MongoDB Atlas is a Database-as-a-Service that handles provisioning, backups, security patches, and scaling for you. Emphasize that from the app's perspective, it's just a connection string (URI), which makes it easy to point the same code at development, staging, and production clusters without rewriting anything.",
+    takeaway: "Cloud Native DB.",
+    duration: 3
+  },
+  {
+    id: 35,
+    layout: 'content',
+    title: "MongoDB Building Blocks",
+    content: [
+      "Database: A logical container for collections (e.g., scalemetrics_dev).",
+      "Collection: A group of related documents (e.g., users, products, specifications).",
+      "Document: A single JSON-like object stored inside a collection.",
+      "Every document automatically gets an `_id` field (usually an ObjectId)."
+    ],
+    notes: "Before diving into code, lock in the mental model. In SQL you have Databases → Tables → Rows. In MongoDB you have Databases → Collections → Documents. Use your ScaleMetrics backend as the running example: one database (e.g. `scalemetrics_dev`) with three main collections: `users`, `products`, and `specifications`. Mention that each document is just a JSON-like object that maps neatly to your JavaScript objects.",
+    takeaway: "Think in Databases → Collections → Documents instead of Databases → Tables → Rows.",
+    duration: 3
+  },
+  {
+    id: 36,
+    layout: 'code',
+    title: "Documents & ObjectId",
+    subtitle: "A Product document in MongoDB",
+    code: `// Example document in the "products" collection
+{
+  _id: ObjectId("66f1c9b8e3a4d71234567890"),
+  name: "Enterprise Analytics Suite",
+  sku: "ENT-ANALYTICS-001",
+  price: 4999,
+  quantity: 10,
+  description: "Flagship analytics product for large teams",
+  createdAt: ISODate("2026-02-01T10:15:00Z"),
+  updatedAt: ISODate("2026-02-01T10:15:00Z")
+}`,
+    notes: "Show how a real document in the `products` collection might look for ScaleMetrics. Point out the `_id` field (an `ObjectId`) which is automatically added by MongoDB, and the `createdAt`/`updatedAt` fields which come from the `timestamps: true` option in your Mongoose schema. Explain that this document shape is what your React frontend eventually receives from the API.",
+    takeaway: "Every MongoDB document has an `_id` and looks like a JSON object that your JS code can use directly.",
+    duration: 3
+  },
+  {
+    id: 37,
+    layout: 'two-column',
+    title: "Collections in ScaleMetrics",
+    columns: {
+      left: {
+        title: "users",
+        content: [
+          "Stores login credentials and basic identity.",
+          "Backed by `models/User.js`.",
+          "Fields: email, password (hashed), timestamps."
+        ],
+        color: "text-green-400"
+      },
+      right: {
+        title: "products & specifications",
+        content: [
+          "`products`: core product info (name, sku, price, quantity, description).",
+          "`specifications`: key/value analytics details linked by product ObjectId.",
+          "Backed by `models/Product.js` and `models/Specification.js`."
+        ],
+        color: "text-cyan-400"
+      }
+    },
+    notes: "Tie the abstract idea of 'collections' directly to your live project. Open MongoDB Atlas later and show students the `users`, `products`, and `specifications` collections that your ScaleMetrics backend creates. Emphasize how each collection aligns with a Mongoose model in your code so the mapping is always clear.",
+    takeaway: "Each Mongoose model maps to a real MongoDB collection that you can see in Atlas.",
+    duration: 4
+  },
+  {
+    id: 38,
+    layout: 'content',
+    title: "Embedded vs Referenced Documents",
+    content: [
+      "Embedded: Store related data inside the same document (one big JSON).",
+      "Referenced: Store related data in another collection and link with an id.",
+      "Rule of thumb: \"Data that is read together can be stored together\".",
+      "ScaleMetrics choice: Products and their Specifications use references."
+    ],
+    notes: "Use a story: for a blog, comments might be embedded inside a post document; for ScaleMetrics, product specifications can grow large and be reused in analytics, so we keep them in a separate `specifications` collection and reference the `product` via ObjectId. Explain that this design makes it easy to query all specs across products and to add new specs without rewriting the main product document.",
+    takeaway: "Pick embedded vs referenced based on access patterns, not just personal preference.",
+    duration: 4
+  },
+  {
+    id: 39,
+    layout: 'diagram',
+    title: "MongoDB Relationships",
+    content: [
+      "One-to-One: user → profile (rare in ScaleMetrics demo).",
+      "One-to-Many: product → many specifications (our main pattern).",
+      "Many-to-Many: users ↔ teams, students ↔ courses (handled via references).",
+      "In MongoDB, relationships are modeled with ObjectId fields and sometimes extra join collections."
+    ],
+    notes: "Connect back to the 'Relationships' theory slide and show how it applies in MongoDB. For ScaleMetrics, highlight the one-to-many relationship between a single Product and many Specification documents. Briefly mention that many-to-many is often done via additional collections that hold pairs of ObjectIds.",
+    takeaway: "Use ObjectId fields to express one-to-one, one-to-many, and many-to-many relationships.",
+    duration: 4
+  },
+  {
+    id: 40,
+    layout: 'content',
+    title: "Indexes in MongoDB",
+    content: [
+      "Indexes speed up queries at the cost of extra write overhead.",
+      "Mongoose lets you define indexes in schemas (e.g., `sku` unique, indexed).",
+      "ScaleMetrics: `sku` on Product and `product` on Specification are indexed.",
+      "Good rule: index fields you frequently filter or sort on."
+    ],
+    notes: "Keep this high-level. Show the `index: true` and `unique: true` flags in your `Product` and `Specification` schemas. Explain that indexes help MongoDB jump directly to matching documents instead of scanning the whole collection, which becomes critical as data grows.",
+    takeaway: "Add indexes to fields you search on often, like SKUs or foreign key references.",
+    duration: 3
+  },
+  {
+    id: 41,
+    layout: 'two-column',
+    title: "Schema Validation Layers",
+    columns: {
+      left: {
+        title: "MongoDB Validation",
+        content: [
+          "MongoDB supports JSON Schema validation at the collection level.",
+          "Useful for enforcing structure even if multiple apps write to the DB."
+        ],
+        color: "text-gray-400"
+      },
+      right: {
+        title: "Mongoose Validation",
+        content: [
+          "Our workshop uses Mongoose schemas for validation in the app layer.",
+          "Rules like `required: true`, `minlength`, `min`, and `unique` live in code."
+        ],
+        color: "text-green-400"
+      }
+    },
+    notes: "Clarify that although MongoDB is flexible, you still want guardrails. In ScaleMetrics you rely on Mongoose schemas to validate data before it ever hits the database. Mention that in larger systems, teams might combine this with MongoDB's own JSON Schema validation for an extra safety net.",
+    takeaway: "Use Mongoose schemas to keep data clean, and optionally MongoDB validation for an extra safety layer.",
+    duration: 3
+  },
+  {
+    id: 42,
+    layout: 'content',
+    title: "Why We Use Mongoose",
+    content: [
+      "Gives structure (schemas) on top of flexible MongoDB collections.",
+      "Provides helpers like `pre('save')`, instance methods, and query APIs.",
+      "Maps JS objects ↔ MongoDB documents with minimal boilerplate.",
+      "Perfect for teaching and for most Node.js backend projects."
+    ],
+    notes: "End the MongoDB concept block by justifying your tool choice. Explain that while you can use the native MongoDB driver directly, Mongoose makes the most common patterns (schemas, references, hooks, queries) much easier to teach and maintain. Tell students that everything in the ScaleMetrics backend uses Mongoose models so the patterns feel consistent.",
+    takeaway: "Mongoose is our productivity layer on top of raw MongoDB.",
+    duration: 3
+  },
+  {
+    id: 43,
+    layout: 'code',
+    title: "Connecting Mongoose",
+    subtitle: "config/db.js",
+    code: `// config/db.js (ScaleMetrics)
+import mongoose from "mongoose";
+
+// Connect to MongoDB using the URI defined in environment variables.
+export const connectDB = async () => {
+  try {
+    // Keep DB connection details in env variables so secrets stay out of code.
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected successfully");
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    process.exit(1); // Fail fast in workshop demos
+  }
+};`,
+    notes: "This is the real `config/db.js` from your ScaleMetrics backend. Walk line by line: we import Mongoose, read `MONGO_URI` from `.env`, connect once at startup, and if it fails we crash loudly so students notice immediately. After explaining, have them create `config/db.js` in their project with this exact code and then import `connectDB` in `server.js`.",
+    takeaway: "Use a dedicated `connectDB` helper to wire MongoDB via environment variables.",
+    duration: 3
+  },
+  {
+    id: 44,
+    layout: 'code',
+    title: "Defining a Schema",
+    subtitle: "models/Product.js (ScaleMetrics)",
+    code: `import mongoose from "mongoose";
+
+// Schema defines the structure of a product in ScaleMetrics
+const productSchema = new mongoose.Schema(
+  {
+    // Human-readable product name (used in tables and detail views).
+    name: { type: String, required: true, trim: true, index: true },
+
+    // SKU is the primary external identifier and must be unique.
+    sku: { type: String, required: true, trim: true, unique: true, index: true },
+
+    // Stored as a simple number for workshop purposes (no currency handling).
+    price: { type: Number, required: true, min: 0 },
+
+    // How many units are available; used in dashboard summaries.
+    quantity: { type: Number, required: true, min: 0, default: 0 },
+
+    // Optional free-text description for detail views.
+    description: { type: String, trim: true, default: "" },
+  },
+  { timestamps: true }
+);
+
+const Product = mongoose.model("Product", productSchema);
+export default Product;`,
+    notes: "This is the real `models/Product.js` file from the ScaleMetrics backend. Even though MongoDB is 'schema-less', our *application* uses a Mongoose schema to enforce rules like 'name and sku are required' and 'price cannot be negative'. As you explain each field, have students create `models/Product.js` in their project and type this exact schema so they feel how a real production model looks.",
+    takeaway: "Use Mongoose schemas to give structure and rules to your data.",
+    duration: 4
+  },
+  {
+    id: 45,
+    layout: 'code',
+    title: "Relationships (References) – Specifications",
+    code: `// models/Specification.js (ScaleMetrics)
+import mongoose from "mongoose";
+
+// Each specification belongs to exactly one Product
+const specificationSchema = new mongoose.Schema(
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",  // Must match the model name 'Product'
+      required: true,
+      index: true,
+    },
+    key: { type: String, required: true, trim: true },
+    value: { type: String, required: true, trim: true },
+  },
+  { timestamps: true }
+);`,
+    notes: "Instead of a generic Order/User example, this is our real `models/Specification.js`. Relational databases use Foreign Keys; here we use a MongoDB reference. The `product` field stores the `ObjectId` of a `Product`, linking extra key/value analytics data back to the core product document. Have students create `models/Specification.js` now so they see a real reference in action.",
+    takeaway: "Use ObjectId references to link related collections in MongoDB.",
+    duration: 3
+  },
+  {
+    id: 46,
+    layout: 'code',
+    title: "Joining Data: Products + Specifications",
+    code: `// controllers/productController.js (excerpt) – getProducts
+const products = await Product.find().sort({ createdAt: -1 }).lean();
+const productIds = products.map((p) => p._id);
+
+// Fetch all specs for these products in a single query
+const specs = await Specification.find({ product: { $in: productIds } }).lean();
+
+// Group specs by product id
+const specsByProduct = specs.reduce((acc, spec) => {
+  const key = String(spec.product);
+  if (!acc[key]) acc[key] = [];
+  acc[key].push({ key: spec.key, value: spec.value });
+  return acc;
+}, {});
+
+// Attach specs to each product for the frontend
+const productsWithSpecs = products.map((product) => ({
+  ...product,
+  specifications: specsByProduct[String(product._id)] || [],
+}));`,
+    notes: "This is how ScaleMetrics \"joins\" Products with their Specifications. Instead of SQL JOINs, we do one query for products, one query for specifications, then group them in memory. Explain the flow slowly, then ask students to implement this logic inside `getProducts` so they understand how to assemble rich API responses from multiple collections. Mention that Mongoose also has `.populate()`, but here we show the join logic explicitly for learning.",
+    takeaway: "Combine related collections in code to return analytics-friendly API responses.",
+    duration: 4
+  },
+  {
+    id: 47,
+    layout: 'section',
+    title: "Module 5",
+    subtitle: "API Testing & Security",
+    sectionTitle: "Verification",
+    notes: "We have built the API. Now, how do we prove it works? And how do we stop hackers from destroying it?",
+    takeaway: "QA & SecOps",
+    duration: 0
+  },
+
+  // --- MODULE 6: API & SECURITY (Slides 46-52) ---
+  {
+    id: 48,
+    layout: 'content',
+    title: "Postman: The Developer's Best Friend",
+    content: [
+      "A tool to simulate HTTP requests.",
+      "1. Choose Method (GET, POST, PUT, DELETE).",
+      "2. Enter URL (http://localhost:5000/api...).",
+      "3. Set Headers (Content-Type: application/json).",
+      "4. Set Body (Raw JSON).",
+      "5. Click Send."
+    ],
+    notes: "You cannot develop a backend effectively using just a browser. A browser bar can only do GET requests. To verify your Login (POST) or Update (PUT) logic, you need a tool like Postman. It allows you to act as the 'Client' before you have built the React Frontend.",
+    takeaway: "Test before frontend integration.",
+    duration: 3
+  },
+  {
+    id: 49,
+    layout: 'content',
+    title: "HTTP Status Codes Recap",
+    content: [
+      "2xx: Success (200 OK, 201 Created)",
+      "4xx: Client Error (400 Bad Request, 401 Unauthorized, 404 Not Found)",
+      "5xx: Server Error (500 Internal Server Error)"
+    ],
+    notes: "Your API communicates with the frontend via these codes. If a user tries to login with a wrong password and you send a '200 OK' with an error message text, you are breaking the standard. Use '401 Unauthorized'. The status code tells the story; the JSON body tells the details.",
+    takeaway: "Use correct codes.",
+    duration: 2
+  },
+  {
+    id: 50,
+    layout: 'content',
+    title: "Authentication vs Authorization",
+    content: [
+      "Authentication (Who are you?): Logging in.",
+      "Authorization (What can you do?): Permissions (Admin vs User).",
+      "We use JSON Web Tokens (JWT) for this."
+    ],
+    notes: "Authentication is like showing your Passport at the airport (proving who you are). Authorization is looking at your ticket to see if you are allowed in First Class (permissions). We will build both.",
+    takeaway: "Identify and Permit.",
+    duration: 3
+  },
+  {
+    id: 51,
+    layout: 'code',
+    title: "Project Setup & Dependencies",
+    subtitle: "package.json & core libraries",
+    code: `// 1) Initialize the project
+//    npm init -y
+
+// 2) Install runtime dependencies
+//    npm install express mongoose dotenv cors bcryptjs jsonwebtoken multer csv-parser
+
+// 3) Install dev dependency for auto-restart
+//    npm install -D nodemon
+
+// 4) Example package.json (simplified)
+{
+  "name": "scalemetrics-backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  }
+}`,
+    notes: "Right after students understand Authentication vs Authorization, start the real project. Have them run these commands in an empty folder to bootstrap the backend, then open `package.json` and walk through each dependency and script. By the end of this step they should be able to run `npm run dev` (it will fail until `server.js` exists, which we add next).",
+    takeaway: "Initialize the ScaleMetrics backend project immediately after learning the auth concepts.",
+    duration: 5
+  },
+  
+  {
+    id: 52,
+    layout: 'code',
+    title: "Hashing Passwords (Bcrypt)",
+    code: `// models/User.js (ScaleMetrics)
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+  },
+  { timestamps: true }
+);
+
+// Hash password before saving so plain text never reaches the database.
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// Compare a candidate password with the stored password hash.
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};`,
+    notes: "Instead of hashing passwords manually in controllers, our real project moves this logic into the `User` model. The `pre('save')` hook guarantees that plain text passwords never reach MongoDB, and `comparePassword` keeps login code clean. Walk through this line by line, then have students build `models/User.js` exactly like this so their registration and login flow is secure by default.",
+    takeaway: "Put hashing logic in the User model so passwords are always stored securely.",
+    duration: 4
+  },
+  {
+    id: 53,
+    layout: 'code',
+    title: "Generating JWT",
+    code: `// controllers/authController.js (ScaleMetrics) – helper
+import jwt from "jsonwebtoken";
+
+const generateToken = (userId) => {
+  // Sign a new token containing the user ID
+  return jwt.sign(
+    { id: userId },
+    process.env.JWT_SECRET,                 // Secret key from .env
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1d" } // 1 day by default
+  );
+};`,
+    notes: "This is the same `generateToken` helper we use inside `authController.js`. Once the user logs in or registers, we give them a JWT. For future requests, they don't send the password again; they send this token. Explain the payload `{ id: userId }`, the secret key, and the expiry, then point out where this helper is called in `registerUser` and `loginUser`. Ask students to add this helper to their own controller file.",
+    takeaway: "Use a small helper function to consistently create JWTs for authenticated users.",
+    duration: 3
+  },
+  {
+    id: 54,
+    layout: 'code',
+    title: "Protect Middleware",
+    code: `// middleware/authMiddleware.js (ScaleMetrics)
+import jwt from "jsonwebtoken";
+
+export const protect = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Not authorized, token missing" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // { id: ... }
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Not authorized, invalid token" });
+  }
+};`,
+    notes: "This is exactly the `middleware/authMiddleware.js` file from your backend. We place this `protect` middleware before any private route (like all `/api/products` routes). It checks for a `Bearer <token>` header, verifies the token, and attaches the decoded payload to `req.user`. After explaining it, have students create `middleware/authMiddleware.js` and then plug it into `productRoutes.js`.",
+    takeaway: "Use a reusable JWT middleware to guard all protected API routes.",
+    duration: 4
+  },
+  {
+    id: 55,
     layout: 'code',
     title: "Router Module",
     subtitle: "routes/authRoutes.js (ScaleMetrics)",
@@ -595,7 +1081,7 @@ export default router;`,
     duration: 3
   },
   {
-    id: 33,
+    id: 56,
     layout: 'code',
     title: "Controller Module",
     subtitle: "controllers/authController.js (ScaleMetrics)",
@@ -665,7 +1151,7 @@ export const loginUser = async (req, res) => {
     duration: 3
   },
   {
-    id: 34,
+    id: 57,
     layout: 'code',
     title: "Error Handling Middleware",
     code: `// Custom Error Handler
@@ -686,490 +1172,6 @@ const errorHandler = (err, req, res, next) => {
 app.use(errorHandler);`,
     notes: "Instead of writing `try-catch` blocks in every single function and manually sending error responses, we can simply `throw` an error, and this central middleware will catch it and format it nicely for the client.",
     takeaway: "Centralize error handling.",
-    duration: 4
-  },
-  {
-    id: 35,
-    layout: 'section',
-    title: "Module 4",
-    subtitle: "MongoDB & Mongoose",
-    sectionTitle: "Data Persistence",
-    notes: "The server is now running and can respond to requests, but it has amnesia—once you restart it, everything in memory is gone. To build real applications, we need a persistent data store so user accounts, products, and analytics survive restarts. Use this moment to transition from 'stateless logic' to 'stateful data' and introduce MongoDB as the permanent memory for the system.",
-    takeaway: "Database Layer",
-    duration: 0
-  },
-
-  // --- MODULE 5: MONGODB & MONGOOSE (Slides 36-45) ---
-  {
-    id: 36,
-    layout: 'two-column',
-    title: "SQL vs NoSQL",
-    columns: {
-      left: {
-        title: "SQL (Relational)",
-        content: [
-          "• Tables & Rows",
-          "• Fixed Schema",
-          "• Good for complex relationships",
-          "• Vertical Scaling (Bigger Server)"
-        ],
-        color: "text-gray-400"
-      },
-      right: {
-        title: "NoSQL (MongoDB)",
-        content: [
-          "• Collections & Documents",
-          "• Flexible Schema",
-          "• Good for Big Data / Rapid Dev",
-          "• Horizontal Scaling (More Servers)"
-        ],
-        color: "text-green-400"
-      }
-    },
-    notes: "MongoDB is a NoSQL database: instead of tables and rows, it uses collections and JSON-like documents stored as BSON (Binary JSON). That means the data in your database looks almost exactly like the JavaScript objects you already work with in Node and React, reducing the 'impedance mismatch' between code and storage. Use this slide to contrast the stricter, schema-first world of SQL with the more flexible, iterative development style MongoDB enables for many modern web apps.",
-    takeaway: "JSON in the Database.",
-    duration: 3
-  },
-  {
-    id: 37,
-    layout: 'content',
-    title: "MongoDB Atlas",
-    content: [
-      "We do not install MongoDB on our laptop.",
-      "We use the Cloud.",
-      "1. Create Account on MongoDB Atlas.",
-      "2. Create a Cluster (Free Tier).",
-      "3. Whitelist IP Address.",
-      "4. Get Connection String (URI)."
-    ],
-    notes: "In 2024+ most teams avoid babysitting database servers on their laptops or VPSs if they can. MongoDB Atlas is a Database-as-a-Service that handles provisioning, backups, security patches, and scaling for you. Emphasize that from the app's perspective, it's just a connection string (URI), which makes it easy to point the same code at development, staging, and production clusters without rewriting anything.",
-    takeaway: "Cloud Native DB.",
-    duration: 3
-  },
-  {
-    id: 38,
-    layout: 'content',
-    title: "MongoDB Building Blocks",
-    content: [
-      "Database: A logical container for collections (e.g., scalemetrics_dev).",
-      "Collection: A group of related documents (e.g., users, products, specifications).",
-      "Document: A single JSON-like object stored inside a collection.",
-      "Every document automatically gets an `_id` field (usually an ObjectId)."
-    ],
-    notes: "Before diving into code, lock in the mental model. In SQL you have Databases → Tables → Rows. In MongoDB you have Databases → Collections → Documents. Use your ScaleMetrics backend as the running example: one database (e.g. `scalemetrics_dev`) with three main collections: `users`, `products`, and `specifications`. Mention that each document is just a JSON-like object that maps neatly to your JavaScript objects.",
-    takeaway: "Think in Databases → Collections → Documents instead of Databases → Tables → Rows.",
-    duration: 3
-  },
-  {
-    id: 39,
-    layout: 'code',
-    title: "Documents & ObjectId",
-    subtitle: "A Product document in MongoDB",
-    code: `// Example document in the "products" collection
-{
-  _id: ObjectId("66f1c9b8e3a4d71234567890"),
-  name: "Enterprise Analytics Suite",
-  sku: "ENT-ANALYTICS-001",
-  price: 4999,
-  quantity: 10,
-  description: "Flagship analytics product for large teams",
-  createdAt: ISODate("2026-02-01T10:15:00Z"),
-  updatedAt: ISODate("2026-02-01T10:15:00Z")
-}`,
-    notes: "Show how a real document in the `products` collection might look for ScaleMetrics. Point out the `_id` field (an `ObjectId`) which is automatically added by MongoDB, and the `createdAt`/`updatedAt` fields which come from the `timestamps: true` option in your Mongoose schema. Explain that this document shape is what your React frontend eventually receives from the API.",
-    takeaway: "Every MongoDB document has an `_id` and looks like a JSON object that your JS code can use directly.",
-    duration: 3
-  },
-  {
-    id: 40,
-    layout: 'two-column',
-    title: "Collections in ScaleMetrics",
-    columns: {
-      left: {
-        title: "users",
-        content: [
-          "Stores login credentials and basic identity.",
-          "Backed by `models/User.js`.",
-          "Fields: email, password (hashed), timestamps."
-        ],
-        color: "text-green-400"
-      },
-      right: {
-        title: "products & specifications",
-        content: [
-          "`products`: core product info (name, sku, price, quantity, description).",
-          "`specifications`: key/value analytics details linked by product ObjectId.",
-          "Backed by `models/Product.js` and `models/Specification.js`."
-        ],
-        color: "text-cyan-400"
-      }
-    },
-    notes: "Tie the abstract idea of 'collections' directly to your live project. Open MongoDB Atlas later and show students the `users`, `products`, and `specifications` collections that your ScaleMetrics backend creates. Emphasize how each collection aligns with a Mongoose model in your code so the mapping is always clear.",
-    takeaway: "Each Mongoose model maps to a real MongoDB collection that you can see in Atlas.",
-    duration: 4
-  },
-  {
-    id: 41,
-    layout: 'content',
-    title: "Embedded vs Referenced Documents",
-    content: [
-      "Embedded: Store related data inside the same document (one big JSON).",
-      "Referenced: Store related data in another collection and link with an id.",
-      "Rule of thumb: \"Data that is read together can be stored together\".",
-      "ScaleMetrics choice: Products and their Specifications use references."
-    ],
-    notes: "Use a story: for a blog, comments might be embedded inside a post document; for ScaleMetrics, product specifications can grow large and be reused in analytics, so we keep them in a separate `specifications` collection and reference the `product` via ObjectId. Explain that this design makes it easy to query all specs across products and to add new specs without rewriting the main product document.",
-    takeaway: "Pick embedded vs referenced based on access patterns, not just personal preference.",
-    duration: 4
-  },
-  {
-    id: 42,
-    layout: 'diagram',
-    title: "MongoDB Relationships",
-    content: [
-      "One-to-One: user → profile (rare in ScaleMetrics demo).",
-      "One-to-Many: product → many specifications (our main pattern).",
-      "Many-to-Many: users ↔ teams, students ↔ courses (handled via references).",
-      "In MongoDB, relationships are modeled with ObjectId fields and sometimes extra join collections."
-    ],
-    notes: "Connect back to the 'Relationships' theory slide and show how it applies in MongoDB. For ScaleMetrics, highlight the one-to-many relationship between a single Product and many Specification documents. Briefly mention that many-to-many is often done via additional collections that hold pairs of ObjectIds.",
-    takeaway: "Use ObjectId fields to express one-to-one, one-to-many, and many-to-many relationships.",
-    duration: 4
-  },
-  {
-    id: 43,
-    layout: 'content',
-    title: "Indexes in MongoDB",
-    content: [
-      "Indexes speed up queries at the cost of extra write overhead.",
-      "Mongoose lets you define indexes in schemas (e.g., `sku` unique, indexed).",
-      "ScaleMetrics: `sku` on Product and `product` on Specification are indexed.",
-      "Good rule: index fields you frequently filter or sort on."
-    ],
-    notes: "Keep this high-level. Show the `index: true` and `unique: true` flags in your `Product` and `Specification` schemas. Explain that indexes help MongoDB jump directly to matching documents instead of scanning the whole collection, which becomes critical as data grows.",
-    takeaway: "Add indexes to fields you search on often, like SKUs or foreign key references.",
-    duration: 3
-  },
-  {
-    id: 44,
-    layout: 'two-column',
-    title: "Schema Validation Layers",
-    columns: {
-      left: {
-        title: "MongoDB Validation",
-        content: [
-          "MongoDB supports JSON Schema validation at the collection level.",
-          "Useful for enforcing structure even if multiple apps write to the DB."
-        ],
-        color: "text-gray-400"
-      },
-      right: {
-        title: "Mongoose Validation",
-        content: [
-          "Our workshop uses Mongoose schemas for validation in the app layer.",
-          "Rules like `required: true`, `minlength`, `min`, and `unique` live in code."
-        ],
-        color: "text-green-400"
-      }
-    },
-    notes: "Clarify that although MongoDB is flexible, you still want guardrails. In ScaleMetrics you rely on Mongoose schemas to validate data before it ever hits the database. Mention that in larger systems, teams might combine this with MongoDB's own JSON Schema validation for an extra safety net.",
-    takeaway: "Use Mongoose schemas to keep data clean, and optionally MongoDB validation for an extra safety layer.",
-    duration: 3
-  },
-  {
-    id: 45,
-    layout: 'content',
-    title: "Why We Use Mongoose",
-    content: [
-      "Gives structure (schemas) on top of flexible MongoDB collections.",
-      "Provides helpers like `pre('save')`, instance methods, and query APIs.",
-      "Maps JS objects ↔ MongoDB documents with minimal boilerplate.",
-      "Perfect for teaching and for most Node.js backend projects."
-    ],
-    notes: "End the MongoDB concept block by justifying your tool choice. Explain that while you can use the native MongoDB driver directly, Mongoose makes the most common patterns (schemas, references, hooks, queries) much easier to teach and maintain. Tell students that everything in the ScaleMetrics backend uses Mongoose models so the patterns feel consistent.",
-    takeaway: "Mongoose is our productivity layer on top of raw MongoDB.",
-    duration: 3
-  },
-  {
-    id: 46,
-    layout: 'code',
-    title: "Connecting Mongoose",
-    subtitle: "config/db.js",
-    code: `// config/db.js (ScaleMetrics)
-import mongoose from "mongoose";
-
-// Connect to MongoDB using the URI defined in environment variables.
-export const connectDB = async () => {
-  try {
-    // Keep DB connection details in env variables so secrets stay out of code.
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected successfully");
-  } catch (error) {
-    console.error("MongoDB connection failed:", error.message);
-    process.exit(1); // Fail fast in workshop demos
-  }
-};`,
-    notes: "This is the real `config/db.js` from your ScaleMetrics backend. Walk line by line: we import Mongoose, read `MONGO_URI` from `.env`, connect once at startup, and if it fails we crash loudly so students notice immediately. After explaining, have them create `config/db.js` in their project with this exact code and then import `connectDB` in `server.js`.",
-    takeaway: "Use a dedicated `connectDB` helper to wire MongoDB via environment variables.",
-    duration: 3
-  },
-  {
-    id: 47,
-    layout: 'code',
-    title: "Defining a Schema",
-    subtitle: "models/Product.js (ScaleMetrics)",
-    code: `import mongoose from "mongoose";
-
-// Schema defines the structure of a product in ScaleMetrics
-const productSchema = new mongoose.Schema(
-  {
-    // Human-readable product name (used in tables and detail views).
-    name: { type: String, required: true, trim: true, index: true },
-
-    // SKU is the primary external identifier and must be unique.
-    sku: { type: String, required: true, trim: true, unique: true, index: true },
-
-    // Stored as a simple number for workshop purposes (no currency handling).
-    price: { type: Number, required: true, min: 0 },
-
-    // How many units are available; used in dashboard summaries.
-    quantity: { type: Number, required: true, min: 0, default: 0 },
-
-    // Optional free-text description for detail views.
-    description: { type: String, trim: true, default: "" },
-  },
-  { timestamps: true }
-);
-
-const Product = mongoose.model("Product", productSchema);
-export default Product;`,
-    notes: "This is the real `models/Product.js` file from the ScaleMetrics backend. Even though MongoDB is 'schema-less', our *application* uses a Mongoose schema to enforce rules like 'name and sku are required' and 'price cannot be negative'. As you explain each field, have students create `models/Product.js` in their project and type this exact schema so they feel how a real production model looks.",
-    takeaway: "Use Mongoose schemas to give structure and rules to your data.",
-    duration: 4
-  },
-  {
-    id: 48,
-    layout: 'code',
-    title: "Relationships (References) – Specifications",
-    code: `// models/Specification.js (ScaleMetrics)
-import mongoose from "mongoose";
-
-// Each specification belongs to exactly one Product
-const specificationSchema = new mongoose.Schema(
-  {
-    product: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",  // Must match the model name 'Product'
-      required: true,
-      index: true,
-    },
-    key: { type: String, required: true, trim: true },
-    value: { type: String, required: true, trim: true },
-  },
-  { timestamps: true }
-);`,
-    notes: "Instead of a generic Order/User example, this is our real `models/Specification.js`. Relational databases use Foreign Keys; here we use a MongoDB reference. The `product` field stores the `ObjectId` of a `Product`, linking extra key/value analytics data back to the core product document. Have students create `models/Specification.js` now so they see a real reference in action.",
-    takeaway: "Use ObjectId references to link related collections in MongoDB.",
-    duration: 3
-  },
-  {
-    id: 49,
-    layout: 'code',
-    title: "Joining Data: Products + Specifications",
-    code: `// controllers/productController.js (excerpt) – getProducts
-const products = await Product.find().sort({ createdAt: -1 }).lean();
-const productIds = products.map((p) => p._id);
-
-// Fetch all specs for these products in a single query
-const specs = await Specification.find({ product: { $in: productIds } }).lean();
-
-// Group specs by product id
-const specsByProduct = specs.reduce((acc, spec) => {
-  const key = String(spec.product);
-  if (!acc[key]) acc[key] = [];
-  acc[key].push({ key: spec.key, value: spec.value });
-  return acc;
-}, {});
-
-// Attach specs to each product for the frontend
-const productsWithSpecs = products.map((product) => ({
-  ...product,
-  specifications: specsByProduct[String(product._id)] || [],
-}));`,
-    notes: "This is how ScaleMetrics \"joins\" Products with their Specifications. Instead of SQL JOINs, we do one query for products, one query for specifications, then group them in memory. Explain the flow slowly, then ask students to implement this logic inside `getProducts` so they understand how to assemble rich API responses from multiple collections. Mention that Mongoose also has `.populate()`, but here we show the join logic explicitly for learning.",
-    takeaway: "Combine related collections in code to return analytics-friendly API responses.",
-    duration: 4
-  },
-  {
-    id: 50,
-    layout: 'section',
-    title: "Module 5",
-    subtitle: "API Testing & Security",
-    sectionTitle: "Verification",
-    notes: "We have built the API. Now, how do we prove it works? And how do we stop hackers from destroying it?",
-    takeaway: "QA & SecOps",
-    duration: 0
-  },
-
-  // --- MODULE 6: API & SECURITY (Slides 46-52) ---
-  {
-    id: 51,
-    layout: 'content',
-    title: "Postman: The Developer's Best Friend",
-    content: [
-      "A tool to simulate HTTP requests.",
-      "1. Choose Method (GET, POST, PUT, DELETE).",
-      "2. Enter URL (http://localhost:5000/api...).",
-      "3. Set Headers (Content-Type: application/json).",
-      "4. Set Body (Raw JSON).",
-      "5. Click Send."
-    ],
-    notes: "You cannot develop a backend effectively using just a browser. A browser bar can only do GET requests. To verify your Login (POST) or Update (PUT) logic, you need a tool like Postman. It allows you to act as the 'Client' before you have built the React Frontend.",
-    takeaway: "Test before frontend integration.",
-    duration: 3
-  },
-  {
-    id: 52,
-    layout: 'content',
-    title: "HTTP Status Codes Recap",
-    content: [
-      "2xx: Success (200 OK, 201 Created)",
-      "4xx: Client Error (400 Bad Request, 401 Unauthorized, 404 Not Found)",
-      "5xx: Server Error (500 Internal Server Error)"
-    ],
-    notes: "Your API communicates with the frontend via these codes. If a user tries to login with a wrong password and you send a '200 OK' with an error message text, you are breaking the standard. Use '401 Unauthorized'. The status code tells the story; the JSON body tells the details.",
-    takeaway: "Use correct codes.",
-    duration: 2
-  },
-  {
-    id: 53,
-    layout: 'content',
-    title: "Authentication vs Authorization",
-    content: [
-      "Authentication (Who are you?): Logging in.",
-      "Authorization (What can you do?): Permissions (Admin vs User).",
-      "We use JSON Web Tokens (JWT) for this."
-    ],
-    notes: "Authentication is like showing your Passport at the airport (proving who you are). Authorization is looking at your ticket to see if you are allowed in First Class (permissions). We will build both.",
-    takeaway: "Identify and Permit.",
-    duration: 3
-  },
-  {
-    id: 54,
-    layout: 'code',
-    title: "Project Setup & Dependencies",
-    subtitle: "package.json & core libraries",
-    code: `// 1) Initialize the project
-//    npm init -y
-
-// 2) Install runtime dependencies
-//    npm install express mongoose dotenv cors bcryptjs jsonwebtoken multer csv-parser
-
-// 3) Install dev dependency for auto-restart
-//    npm install -D nodemon
-
-// 4) Example package.json (simplified)
-{
-  "name": "scalemetrics-backend",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
-  }
-}`,
-    notes: "Right after students understand Authentication vs Authorization, start the real project. Have them run these commands in an empty folder to bootstrap the backend, then open `package.json` and walk through each dependency and script. By the end of this step they should be able to run `npm run dev` (it will fail until `server.js` exists, which we add next).",
-    takeaway: "Initialize the ScaleMetrics backend project immediately after learning the auth concepts.",
-    duration: 5
-  },
-  {
-    id: 50,
-    layout: 'code',
-    title: "Hashing Passwords (Bcrypt)",
-    code: `// models/User.js (ScaleMetrics)
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-
-const userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-    },
-  },
-  { timestamps: true }
-);
-
-// Hash password before saving so plain text never reaches the database.
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-// Compare a candidate password with the stored password hash.
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};`,
-    notes: "Instead of hashing passwords manually in controllers, our real project moves this logic into the `User` model. The `pre('save')` hook guarantees that plain text passwords never reach MongoDB, and `comparePassword` keeps login code clean. Walk through this line by line, then have students build `models/User.js` exactly like this so their registration and login flow is secure by default.",
-    takeaway: "Put hashing logic in the User model so passwords are always stored securely.",
-    duration: 4
-  },
-  {
-    id: 51,
-    layout: 'code',
-    title: "Generating JWT",
-    code: `// controllers/authController.js (ScaleMetrics) – helper
-import jwt from "jsonwebtoken";
-
-const generateToken = (userId) => {
-  // Sign a new token containing the user ID
-  return jwt.sign(
-    { id: userId },
-    process.env.JWT_SECRET,                 // Secret key from .env
-    { expiresIn: process.env.JWT_EXPIRES_IN || "1d" } // 1 day by default
-  );
-};`,
-    notes: "This is the same `generateToken` helper we use inside `authController.js`. Once the user logs in or registers, we give them a JWT. For future requests, they don't send the password again; they send this token. Explain the payload `{ id: userId }`, the secret key, and the expiry, then point out where this helper is called in `registerUser` and `loginUser`. Ask students to add this helper to their own controller file.",
-    takeaway: "Use a small helper function to consistently create JWTs for authenticated users.",
-    duration: 3
-  },
-  {
-    id: 52,
-    layout: 'code',
-    title: "Protect Middleware",
-    code: `// middleware/authMiddleware.js (ScaleMetrics)
-import jwt from "jsonwebtoken";
-
-export const protect = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Not authorized, token missing" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id: ... }
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Not authorized, invalid token" });
-  }
-};`,
-    notes: "This is exactly the `middleware/authMiddleware.js` file from your backend. We place this `protect` middleware before any private route (like all `/api/products` routes). It checks for a `Bearer <token>` header, verifies the token, and attaches the decoded payload to `req.user`. After explaining it, have students create `middleware/authMiddleware.js` and then plug it into `productRoutes.js`.",
-    takeaway: "Use a reusable JWT middleware to guard all protected API routes.",
     duration: 4
   },
   {
