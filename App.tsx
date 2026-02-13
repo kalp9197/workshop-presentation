@@ -86,12 +86,31 @@ const App: React.FC = () => {
       <footer className="h-10 sm:h-12 md:h-14 bg-surface-50 border-t border-surface-300 flex items-center justify-between px-2 sm:px-3 md:px-6 z-50 flex-shrink-0 relative">
 
         <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
-          <a href="https://technotery.com/" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1.5 sm:space-x-2 group flex-shrink-0">
-            <img src="/assets/cropped-Technotery-Logo-512px.png" alt="Technotery" className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span className="hidden sm:inline text-xs sm:text-sm text-txt-500 group-hover:text-txt-900 transition-colors">
-              Presented by <span className="text-brand-red font-bold">Technotery</span>
+          <div className="flex items-center space-x-1.5 sm:space-x-2 group flex-shrink-0">
+            <span className="hidden sm:inline text-[10px] sm:text-xs text-txt-400 uppercase tracking-[0.18em]">
+              Presented by
             </span>
-          </a>
+            <a
+              href="https://technotery.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <img
+                src="/assets/cropped-Technotery-Logo-512px.png"
+                alt="Technotery"
+                className="h-5 w-5 sm:h-6 sm:w-6"
+              />
+            </a>
+            <span className="hidden sm:inline text-[11px] sm:text-xs font-semibold text-txt-400">
+              &
+            </span>
+            <img
+              src="/assets/infopercept-logo.svg"
+              alt="Infopercept"
+              className="h-4 w-auto sm:h-5 sm:w-auto"
+            />
+          </div>
           <div className="h-3 sm:h-4 w-[1px] bg-surface-300"></div>
           <div className="text-xs sm:text-sm text-txt-500 flex-shrink-0">
             {currentSlideIndex + 1} / {slides.length}

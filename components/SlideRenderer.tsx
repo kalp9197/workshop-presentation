@@ -12,8 +12,8 @@ const LogoWatermark: React.FC = () => (
   <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0">
     <img
       src="/assets/Technotery logo - Transparent.png"
-      alt=""
-      className="w-[40%] max-w-[500px] opacity-[0.03]"
+      alt="Technotery"
+      className="w-[70%] max-w-[900px] opacity-[0.04]"
       aria-hidden="true"
     />
   </div>
@@ -96,12 +96,12 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-brand-red rounded-full blur-[100px]"></div>
     </div>
 
-    {/* Large watermark logo behind card */}
+    {/* Large watermark logo behind card (Technotery only) */}
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
       <img
         src="/assets/Technotery logo - Transparent.png"
-        alt=""
-        className="w-[60%] max-w-[700px] opacity-[0.04]"
+        alt="Technotery"
+        className="w-[85%] max-w-[1040px] opacity-[0.06]"
         aria-hidden="true"
       />
     </div>
@@ -126,23 +126,30 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
       )}
     </div>
 
-    {/* Technotery Branding */}
+    {/* Technotery + Infopercept Branding (Technotery dominant) */}
     <div className="absolute bottom-6 sm:bottom-8 md:bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10">
       <span className="text-[11px] sm:text-sm md:text-base text-txt-400 uppercase tracking-[0.28em]">
         Presented by
       </span>
-      <a
-        href="https://technotery.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover:opacity-90 transition-opacity"
-      >
+      <div className="mt-2 flex items-center gap-4 sm:gap-6">
+        <a
+          href="https://technotery.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:opacity-90 transition-opacity"
+        >
           <img
             src="/assets/Technotery logo - Transparent.png"
-            alt="Technotery Business Solutions"
-            className="h-28 sm:h-32 md:h-40 lg:h-48 opacity-90 hover:opacity-100 transition-opacity"
+            alt="Technotery"
+            className="h-32 sm:h-40 md:h-48 lg:h-56 opacity-90 hover:opacity-100 transition-opacity"
           />
-      </a>
+        </a>
+        <img
+          src="/assets/infopercept-logo.svg"
+          alt="Infopercept"
+        className="h-8 sm:h-9 md:h-10 lg:h-11 opacity-80"
+        />
+      </div>
     </div>
   </div>
 );
