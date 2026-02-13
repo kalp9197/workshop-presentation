@@ -106,7 +106,7 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
       />
     </div>
 
-    <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10 bg-surface-50/90 rounded-2xl backdrop-blur-sm border border-surface-300 shadow-xl max-w-full w-full max-w-4xl">
+    <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10 bg-surface-50/90 rounded-2xl backdrop-blur-sm border border-surface-300 shadow-xl max-w-full w-full max-w-4xl -mt-6 sm:-mt-8 md:-mt-10">
       <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6 mb-3 sm:mb-5 md:mb-6 text-brand-red">
         <Database className="w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-11 lg:h-11" />
         <ArrowRight className="w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 lg:w-11 lg:h-11" />
@@ -137,11 +137,11 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
         rel="noopener noreferrer"
         className="hover:opacity-90 transition-opacity"
       >
-        <img
-          src="/assets/Technotery logo - Transparent.png"
-          alt="Technotery Business Solutions"
-          className="h-12 sm:h-16 md:h-22 lg:h-28 opacity-90 hover:opacity-100 transition-opacity"
-        />
+          <img
+            src="/assets/Technotery logo - Transparent.png"
+            alt="Technotery Business Solutions"
+            className="h-28 sm:h-32 md:h-40 lg:h-48 opacity-90 hover:opacity-100 transition-opacity"
+          />
       </a>
     </div>
   </div>

@@ -5,15 +5,14 @@ export const slides: SlideData[] = [
   {
     id: 1,
     layout: 'title',
-    title: "Full Stack Web Development Masterclass",
+    title: "Workshop on Platform Engineering and Big Data Tools",
     subtitle: "From JavaScript Basics to Big Data Architecture",
     notes: "Welcome everyone. Today isn't just about learning syntax; it's about architecture and thinking like a systems engineer. We are going to bridge the gap between building a simple 'todo app' and building a system that handles data at scale, like real MERN applications in production. We will cover the entire MERN stack, but more importantly, we will understand *how* the pieces fit together under the hood and when to use each tool. Set the expectation that this will be fast-paced and hands-on: we'll constantly connect concepts to the ScaleMetrics backend we build live. By the end of these 5 hours, you should see the full picture of modern web development and feel confident recreating it on your own.",
     takeaway: "Today you transition from Coder to Engineer.",
-    duration: 3,
-    visualDesc: "Technotery Workshop | 5 Hours"
+    duration: 3
   },
   {
-    id: 0,
+    id: 2,
     layout: 'presenters',
     title: "Meet Your Instructors",
     subtitle: "Real-world engineers behind this workshop",
@@ -64,7 +63,7 @@ export const slides: SlideData[] = [
     duration: 3
   },
   {
-    id: 2,
+    id: 3,
     layout: 'roadmap',
     title: "The Workshop Roadmap",
     columns: {
@@ -92,7 +91,7 @@ export const slides: SlideData[] = [
     duration: 3
   },
   {
-    id: 3,
+    id: 4,
     layout: 'diagram',
     title: "The MERN Stack Ecosystem",
     content: [
@@ -106,7 +105,7 @@ export const slides: SlideData[] = [
     duration: 3
   },
   {
-    id: 4,
+    id: 5,
     layout: 'content',
     title: "Client-Server Architecture",
     content: [
@@ -120,219 +119,19 @@ export const slides: SlideData[] = [
     takeaway: "Request -> Process -> Response.",
     duration: 3
   },
-  {
-    id: 5,
-    layout: 'section',
-    title: "Module 1",
-    subtitle: "Modern JavaScript",
-    sectionTitle: "The Language of the Web",
-    notes: "Before we touch a server or a database, we must master the tool we are using. Node.js IS JavaScript, just running outside the browser, so if your JS fundamentals are weak, your backend code will be weak as well. Set the expectation that this module will feel like a rapid ES6+ refresher: we will modernize your syntax so the later Node/Express and React code feels natural instead of confusing.",
-    takeaway: "JS Fundamentals",
-    duration: 0
-  },
-
-  // --- MODULE 2: JS FUNDAMENTALS & ASYNC (Slides 6-15) ---
+  // --- MODULE 2: NODE.JS INTERNALS (Slides 15-23) ---
   {
     id: 6,
-    layout: 'code',
-    title: "ES6: let & const",
-    subtitle: "Stop using 'var'",
-    code: `// --- THE OLD WAY (Avoid this) ---
-// 'var' is function-scoped. It leaks out of blocks.
-var name = "John";
-
-// --- THE MODERN WAY (Use this) ---
-// 'let' is block-scoped. Use it only if variables change.
-let age = 25; 
-age = 26; // This is allowed
-
-// 'const' is block-scoped and immutable.
-// This is your default choice for 99% of variables.
-const PI = 3.14; 
-// PI = 3.15; // ❌ ERROR: Assignment to constant variable`,
-    notes: "In modern development, 'var' is considered a bad practice because of hoisting and function scoping, which make it behave unpredictably in large files. 99% of the time, you should use 'const' so your variables cannot be accidentally reassigned, which prevents subtle bugs in production. Only use 'let' when you know for a fact the value needs to change (like in a loop or a counter), and challenge students to refactor any old code they see using 'var' in their own projects after the workshop.",
-    takeaway: "Default to const.",
-    duration: 3
-  },
-  {
-    id: 7,
-    layout: 'code',
-    title: "Arrow Functions",
-    subtitle: "Cleaner Syntax",
-    code: `// --- TRADITIONAL FUNCTION ---
-function add(a, b) {
-  return a + b;
-}
-
-// --- ARROW FUNCTION (ES6) ---
-// Cleaner syntax. Implicit return if no brackets used.
-const add = (a, b) => a + b;
-
-// With a block body (requires explicit return)
-const log = (msg) => {
-  console.log("Log:", msg);
-  return true;
-};`,
-    notes: "Arrow functions (`=>`) provide a shorter syntax for writing functions, but their real power lies in how they handle the `this` keyword. Unlike traditional functions, arrow functions do not create their own `this` context—they inherit `this` from the surrounding scope where they were defined. This behavior is called 'lexical this binding'. In practice, this means you avoid common bugs where `this` unexpectedly changes inside callbacks, event handlers, or nested functions. For example, in React components, arrow functions ensure that `this` always refers to the component instance, preventing errors when handling button clicks or API responses. Throughout this workshop, arrow functions are the default choice, matching modern JavaScript best practices used in production codebases.",
-    takeaway: "Modernize your functions.",
-    duration: 3
-  },
-  {
-    id: 8,
-    layout: 'code',
-    title: "Destructuring",
-    subtitle: "Unpacking Data",
-    code: `const user = { 
-  name: "Alice", 
-  age: 30, 
-  role: "Admin",
-  location: "NY"
-};
-
-// --- WITHOUT DESTRUCTURING ---
-// const name = user.name;
-// const role = user.role;
-
-// --- WITH DESTRUCTURING ---
-// Extract specifically what you need in one line
-const { name, role } = user;
-
-console.log(name); // Output: "Alice"`,
-    notes: "Destructuring is a way to unpack values from objects (or arrays) into individual variables in a single, clean line. Instead of writing `const name = user.name; const role = user.role;` across multiple lines, destructuring lets you write `const { name, role } = user;` — shorter, more readable, and less error-prone. This pattern appears everywhere in modern JavaScript. In Express, you destructure incoming request data like `const { email, password } = req.body;` to pull out exactly the fields you need. In React, props and state are almost always destructured at the top of a component. The benefit is twofold: your code becomes self-documenting (you can see at a glance which fields are being used), and you avoid repetitive `object.property` chains that are easy to mistype.",
-    takeaway: "Extract what you need.",
-    duration: 3
-  },
-  {
-    id: 9,
-    layout: 'content',
-    title: "Synchronous vs Asynchronous",
-    content: [
-      "Synchronous: Line 2 waits for Line 1 to finish. (Blocking)",
-      "Asynchronous: Line 2 runs while Line 1 is still working. (Non-blocking)",
-      "JavaScript is Single-Threaded. Blocking code freezes the entire server.",
-      "We MUST use Async for: Database, File I/O, API calls."
-    ],
-    notes: "Use the restaurant waiter analogy to make this memorable. In a synchronous world, the waiter takes your order, gives it to the chef, and then just stands in the kitchen doing nothing until the food is ready—no one else gets served. In an asynchronous world, the waiter gives the order to the chef and immediately goes to serve other tables while the food cooks, maximizing throughput. Node.js is that efficient waiter: it delegates slow tasks (like database calls) and keeps serving other clients instead of blocking.",
-    takeaway: "Don't block the thread.",
-    duration: 4
-  },
-  {
-    id: 10,
-    layout: 'code',
-    title: "The Old Way: Callbacks",
-    subtitle: "Callback Hell",
-    code: `// This is hard to read and debug
-getData(function(a) {
-  // We wait for 'a' to return...
-  getMoreData(a, function(b) {
-    // Then we wait for 'b'...
-    getEvenMoreData(b, function(c) {
-      // Then we wait for 'c'...
-      console.log(c);
-    });
-  });
-});`,
-    notes: "This deeply nested structure is known as 'callback hell' or the 'pyramid of doom'. It happens when multiple asynchronous operations depend on each other—each one needs the result of the previous one, so the next callback is nested inside the previous callback. The problems are immediate: readability drops because the code drifts further to the right with each level; error handling is nearly impossible because there is no single place to catch failures; debugging is painful because stack traces become cryptic; and reusing any of the inner logic elsewhere requires copy-pasting entire blocks. This pattern was the standard way to write async JavaScript before ES6, and the frustration it caused is exactly why Promises (and later async/await) were invented as cleaner alternatives.",
-    takeaway: "Avoid nesting hell.",
-    duration: 3
-  },
-  {
-    id: 11,
-    layout: 'code',
-    title: "The Better Way: Promises",
-    subtitle: "Chaining .then()",
-    code: `// Flattens the code using .then() chaining
-getData()
-  .then(a => {
-    return getMoreData(a);
-  })
-  .then(b => {
-    return getEvenMoreData(b);
-  })
-  .then(c => {
-    console.log(c);
-  })
-  .catch(err => {
-    // Handles errors for ANY of the steps above
-    console.error(err);
-  });`,
-    notes: "A Promise is an object representing the eventual completion or failure of an asynchronous operation, and it moves through three states: pending, fulfilled (resolved), or rejected. The real win is how `.then()` and `.catch()` let us flatten our code into a clean top-to-bottom chain instead of a pyramid of nested callbacks. As you step through this example, have students trace where errors go so they see that a single `.catch()` can handle failures from any step in the chain.",
-    takeaway: "Promises flatten the code.",
-    duration: 4
-  },
-  {
-    id: 12,
-    layout: 'code',
-    title: "The Best Way: Async / Await",
-    subtitle: "Syntactic Sugar for Promises",
-    code: `// 1. Mark function as 'async'
-const processData = async () => {
-  try {
-    // 2. 'await' pauses execution here until getData() finishes
-    const a = await getData();
-    
-    // 3. This line won't run until 'a' is ready
-    const b = await getMoreData(a);
-    
-    console.log(b);
-  } catch (error) {
-    // 4. Catches errors from any step
-    console.error("Something went wrong", error);
-  }
-};`,
-    notes: "Async/await is the modern standard for writing asynchronous JavaScript and is built directly on top of Promises. It lets your code read top-to-bottom like synchronous logic, while still being non-blocking under the hood. Explain that `await` tells JavaScript: 'Pause this specific function here, go do other work, and resume when this Promise settles.' Emphasize the importance of wrapping awaits in `try/catch` blocks to prevent unhandled rejections from crashing your Node process.",
-    takeaway: "Write async code that looks sync.",
-    duration: 5
-  },
-  {
-    id: 13,
-    layout: 'content',
-    title: "Rules of Async/Await",
-    content: [
-      "1. You can only use `await` inside a function marked `async`.",
-      "2. `async` functions always return a Promise implicitly.",
-      "3. Use `try/catch` blocks to handle errors (rejections).",
-      "4. `await` halts the local function execution, not the whole program."
-    ],
-    notes: "Memorize these rules because almost every async bug in beginner code comes from breaking them. The most common error you will see is 'SyntaxError: await is only valid in async functions', which simply means you forgot to mark a function as `async`. Also, never forget the `try/catch` block around awaited database or network calls; otherwise a simple MongoDB outage could crash your entire application instead of returning a friendly error to the client.",
-    takeaway: "Master Async/Await.",
-    duration: 3
-  },
-  {
-    id: 14,
-    layout: 'code',
-    title: "Handling Parallel Promises",
-    code: `const fetchAll = async () => {
-  // Triggers both requests immediately (in parallel)
-  const userPromise = getUser(1);
-  const postsPromise = getPosts(1);
-
-  // 'Promise.all' waits for BOTH to finish
-  const [user, posts] = await Promise.all([
-    userPromise, 
-    postsPromise
-  ]);
-  
-  console.log(user, posts);
-};`,
-    notes: "A common performance mistake is awaiting independent operations sequentially when they do not depend on each other. If `getUser` takes 2 seconds and `getPosts` takes 2 seconds, awaiting them one by one takes roughly 4 seconds, which feels slow in a real API. Using `Promise.all` fires both requests at once and waits for both to finish, cutting total time in half; show this with a quick timing demo so the benefit is obvious.",
-    takeaway: "Maximize concurrency.",
-    duration: 4
-  },
-  {
-    id: 15,
     layout: 'section',
-    title: "Module 2",
+    title: "Module 1",
     subtitle: "Node.js Internals",
     sectionTitle: "Understanding the Runtime",
     notes: "Now that we have modern JavaScript fundamentals refreshed, we can zoom out and look at the environment where our backend actually runs: Node.js. Frame this as moving from 'how to speak the language' to 'how the engine that runs the language works'. Understanding Node internals (event loop, modules, core APIs) will make later performance and debugging issues much easier to reason about.",
     takeaway: "Node.js Core",
     duration: 0
   },
-
-  // --- MODULE 3: NODE.JS INTERNALS (Slides 16-25) ---
   {
-    id: 16,
+    id: 7,
     layout: 'two-column',
     title: "What is Node.js really?",
     columns: {
@@ -360,7 +159,35 @@ const processData = async () => {
     duration: 3
   },
   {
-    id: 17,
+    id: 8,
+    layout: 'code',
+    title: "Project Setup & Dependencies",
+    subtitle: "package.json & core libraries",
+    code: `// 1) Initialize the project
+//    npm init -y
+
+// 2) Install runtime dependencies
+//    npm install express mongoose dotenv cors bcryptjs jsonwebtoken multer csv-parser
+
+// 3) Install dev dependency for auto-restart
+//    npm install -D nodemon
+
+// 4) Example package.json (simplified)
+{
+  "name": "scalemetrics-backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  }
+}`,
+    notes: "Walk through the why behind each dependency instead of just listing commands. `express` for HTTP server, `mongoose` for MongoDB, `dotenv` for env variables, `cors` for frontend integration, `bcryptjs` and `jsonwebtoken` for auth, `multer` and `csv-parser` for future file/data ingestion. Show the final `package.json` so students see how scripts and ES modules (`type: \"module\"`) are wired. Ask them to run `npm run dev` at the end of this step.",
+    takeaway: "Students can bootstrap a modern Node + Mongo backend project from scratch.",
+    duration: 5
+  },
+  {
+    id: 9,
     layout: 'diagram',
     title: "The Event Loop",
     content: [
@@ -374,7 +201,7 @@ const processData = async () => {
     duration: 5
   },
   {
-    id: 18,
+    id: 10,
     layout: 'code',
     title: "Modules: Import vs Require",
     subtitle: "CommonJS vs ES Modules",
@@ -393,7 +220,7 @@ export default myFunction;`,
     duration: 3
   },
   {
-    id: 19,
+    id: 11,
     layout: 'content',
     title: "NPM (Node Package Manager)",
     content: [
@@ -408,7 +235,7 @@ export default myFunction;`,
     duration: 3
   },
   {
-    id: 20,
+    id: 12,
     layout: 'code',
     title: "Core Module: FS (File System)",
     code: `import fs from 'fs/promises';
@@ -428,7 +255,7 @@ const readFileData = async () => {
     duration: 3
   },
   {
-    id: 21,
+    id: 13,
     layout: 'code',
     title: "Core Module: Path",
     subtitle: "Handling file paths cross-platform",
@@ -447,7 +274,7 @@ const fullPath = path.join('folder', 'subfolder', 'file.txt');
     duration: 3
   },
   {
-    id: 22,
+    id: 14,
     layout: 'code',
     title: "Core Module: HTTP",
     subtitle: "The raw server",
@@ -467,7 +294,7 @@ server.listen(5000);`,
     duration: 3
   },
   {
-    id: 23,
+    id: 15,
     layout: 'content',
     title: "Environment Variables",
     content: [
@@ -480,8 +307,187 @@ server.listen(5000);`,
     takeaway: "Security First.",
     duration: 3
   },
+
+  // --- MODULE 1: MODERN JAVASCRIPT & ASYNC (Slides 5-14) ---
+  {
+    id: 16,
+    layout: 'section',
+    title: "Module 2",
+    subtitle: "Modern JavaScript",
+    sectionTitle: "The Language of the Web",
+    notes: "Before we touch a server or a database, we must master the tool we are using. Node.js IS JavaScript, just running outside the browser, so if your JS fundamentals are weak, your backend code will be weak as well. Set the expectation that this module will feel like a rapid ES6+ refresher: we will modernize your syntax so the later Node/Express and React code feels natural instead of confusing.",
+    takeaway: "JS Fundamentals",
+    duration: 0
+  },
+  {
+    id: 17,
+    layout: 'code',
+    title: "ES6: let & const",
+    subtitle: "Stop using 'var'",
+    code: `// --- THE OLD WAY (Avoid this) ---
+// 'var' is function-scoped. It leaks out of blocks.
+var name = "John";
+
+// --- THE MODERN WAY (Use this) ---
+// 'let' is block-scoped. Use it only if variables change.
+let age = 25; 
+age = 26; // This is allowed
+
+// 'const' is block-scoped and immutable.
+// This is your default choice for 99% of variables.
+const PI = 3.14; 
+// PI = 3.15; // ❌ ERROR: Assignment to constant variable`,
+    notes: "In modern development, 'var' is considered a bad practice because of hoisting and function scoping, which make it behave unpredictably in large files. 99% of the time, you should use 'const' so your variables cannot be accidentally reassigned, which prevents subtle bugs in production. Only use 'let' when you know for a fact the value needs to change (like in a loop or a counter), and challenge students to refactor any old code they see using 'var' in their own projects after the workshop.",
+    takeaway: "Default to const.",
+    duration: 3
+  },
+  {
+    id: 18,
+    layout: 'content',
+    title: "Synchronous vs Asynchronous",
+    content: [
+      "Synchronous: Line 2 waits for Line 1 to finish. (Blocking)",
+      "Asynchronous: Line 2 runs while Line 1 is still working. (Non-blocking)",
+      "JavaScript is Single-Threaded. Blocking code freezes the entire server.",
+      "We MUST use Async for: Database, File I/O, API calls.",
+    ],
+    notes: "Use the restaurant waiter analogy to make this memorable. In a synchronous world, the waiter takes your order, gives it to the chef, and then just stands in the kitchen doing nothing until the food is ready—no one else gets served. In an asynchronous world, the waiter gives the order to the chef and immediately goes to serve other tables while the food cooks, maximizing throughput. Node.js is that efficient waiter: it delegates slow tasks (like database calls) and keeps serving other clients instead of blocking.",
+    takeaway: "Don't block the thread.",
+    duration: 4
+  },
+  {
+    id: 19,
+    layout: 'code',
+    title: "Synchronous vs Asynchronous – Code Example",
+    subtitle: "Blocking vs Non-blocking in Node.js",
+    code: `// --- Synchronous (Blocking) ---
+import fs from 'fs';
+
+console.log('Start');
+const data = fs.readFileSync('data.txt', 'utf-8'); // Line 2 waits here
+console.log('File length:', data.length);
+console.log('End (runs AFTER file read finishes)');
+
+// --- Asynchronous (Non-blocking) ---
+import fsPromises from 'fs/promises';
+
+console.log('Start');
+const readFileAsync = async () => {
+  const dataAsync = await fsPromises.readFile('data.txt', 'utf-8');
+  console.log('File length:', dataAsync.length);
+};
+
+readFileAsync();
+console.log('End (can log WHILE file is loading)');`,
+    notes: "Walk line by line. In the synchronous example, `fs.readFileSync` blocks the single JS thread until the file is fully read, so `console.log('End')` must wait. In the asynchronous version, the `readFileAsync` function hands the I/O work to libuv, allowing `console.log('End')` to run immediately while the file is still loading; the callback resumes only when the Promise resolves. Reinforce that for anything slow (DB, file I/O, network calls), we must use the async patterns from this slide to avoid freezing every request.",
+    takeaway: "See blocking vs non-blocking in real code.",
+    duration: 5
+  },
+  {
+    id: 20,
+    layout: 'code',
+    title: "The Old Way: Callbacks",
+    subtitle: "Callback Hell",
+    code: `// This is hard to read and debug
+getData(function(a) {
+  // We wait for 'a' to return...
+  getMoreData(a, function(b) {
+    // Then we wait for 'b'...
+    getEvenMoreData(b, function(c) {
+      // Then we wait for 'c'...
+      console.log(c);
+    });
+  });
+});`,
+    notes: "This deeply nested structure is known as 'callback hell' or the 'pyramid of doom'. It happens when multiple asynchronous operations depend on each other—each one needs the result of the previous one, so the next callback is nested inside the previous callback. The problems are immediate: readability drops because the code drifts further to the right with each level; error handling is nearly impossible because there is no single place to catch failures; debugging is painful because stack traces become cryptic; and reusing any of the inner logic elsewhere requires copy-pasting entire blocks. This pattern was the standard way to write async JavaScript before ES6, and the frustration it caused is exactly why Promises (and later async/await) were invented as cleaner alternatives.",
+    takeaway: "Avoid nesting hell.",
+    duration: 3
+  },
+  {
+    id: 21,
+    layout: 'code',
+    title: "The Better Way: Promises",
+    subtitle: "Chaining .then()",
+    code: `// Flattens the code using .then() chaining
+getData()
+  .then(a => {
+    return getMoreData(a);
+  })
+  .then(b => {
+    return getEvenMoreData(b);
+  })
+  .then(c => {
+    console.log(c);
+  })
+  .catch(err => {
+    // Handles errors for ANY of the steps above
+    console.error(err);
+  });`,
+    notes: "A Promise is an object representing the eventual completion or failure of an asynchronous operation, and it moves through three states: pending, fulfilled (resolved), or rejected. The real win is how `.then()` and `.catch()` let us flatten our code into a clean top-to-bottom chain instead of a pyramid of nested callbacks. As you step through this example, have students trace where errors go so they see that a single `.catch()` can handle failures from any step in the chain.",
+    takeaway: "Promises flatten the code.",
+    duration: 4
+  },
+  {
+    id: 22,
+    layout: 'code',
+    title: "The Best Way: Async / Await",
+    subtitle: "Syntactic Sugar for Promises",
+    code: `// 1. Mark function as 'async'
+const processData = async () => {
+  try {
+    // 2. 'await' pauses execution here until getData() finishes
+    const a = await getData();
+    
+    // 3. This line won't run until 'a' is ready
+    const b = await getMoreData(a);
+    
+    console.log(b);
+  } catch (error) {
+    // 4. Catches errors from any step
+    console.error("Something went wrong", error);
+  }
+};`,
+    notes: "Async/await is the modern standard for writing asynchronous JavaScript and is built directly on top of Promises. It lets your code read top-to-bottom like synchronous logic, while still being non-blocking under the hood. Explain that `await` tells JavaScript: 'Pause this specific function here, go do other work, and resume when this Promise settles.' Emphasize the importance of wrapping awaits in `try/catch` blocks to prevent unhandled rejections from crashing your Node process.",
+    takeaway: "Write async code that looks sync.",
+    duration: 5
+  },
+  {
+    id: 23,
+    layout: 'content',
+    title: "Rules of Async/Await",
+    content: [
+      "1. You can only use `await` inside a function marked `async`.",
+      "2. `async` functions always return a Promise implicitly.",
+      "3. Use `try/catch` blocks to handle errors (rejections).",
+      "4. `await` halts the local function execution, not the whole program."
+    ],
+    notes: "Memorize these rules because almost every async bug in beginner code comes from breaking them. The most common error you will see is 'SyntaxError: await is only valid in async functions', which simply means you forgot to mark a function as `async`. Also, never forget the `try/catch` block around awaited database or network calls; otherwise a simple MongoDB outage could crash your entire application instead of returning a friendly error to the client.",
+    takeaway: "Master Async/Await.",
+    duration: 3
+  },
   {
     id: 24,
+    layout: 'code',
+    title: "Handling Parallel Promises",
+    code: `const fetchAll = async () => {
+  // Triggers both requests immediately (in parallel)
+  const userPromise = getUser(1);
+  const postsPromise = getPosts(1);
+
+  // 'Promise.all' waits for BOTH to finish
+  const [user, posts] = await Promise.all([
+    userPromise, 
+    postsPromise
+  ]);
+  
+  console.log(user, posts);
+};`,
+    notes: "A common performance mistake is awaiting independent operations sequentially when they do not depend on each other. If `getUser` takes 2 seconds and `getPosts` takes 2 seconds, awaiting them one by one takes roughly 4 seconds, which feels slow in a real API. Using `Promise.all` fires both requests at once and waits for both to finish, cutting total time in half; show this with a quick timing demo so the benefit is obvious.",
+    takeaway: "Maximize concurrency.",
+    duration: 4
+  },
+  {
+    id: 25,
     layout: 'section',
     title: "Module 3",
     subtitle: "Express.js Framework",
@@ -491,7 +497,7 @@ server.listen(5000);`,
     duration: 0
   },
   {
-    id: 25,
+    id: 26,
     layout: 'content',
     title: "What is Express?",
     content: [
@@ -508,7 +514,7 @@ server.listen(5000);`,
 
   // --- MODULE 4: EXPRESS.JS (Slides 26-35) ---
   {
-    id: 26,
+    id: 27,
     layout: 'code',
     title: "Basic Express Server",
     code: `import express from 'express';
@@ -529,7 +535,7 @@ app.listen(PORT, () => {
     duration: 3
   },
   {
-    id: 27,
+    id: 28,
     layout: 'diagram',
     title: "The Middleware Pattern",
     content: [
@@ -544,7 +550,7 @@ app.listen(PORT, () => {
     duration: 4
   },
   {
-    id: 28,
+    id: 29,
     layout: 'code',
     title: "Writing Middleware",
     code: `// A custom middleware function
@@ -563,7 +569,7 @@ app.use(logger);`,
     duration: 3
   },
   {
-    id: 29,
+    id: 30,
     layout: 'code',
     title: "Parsing JSON Body",
     code: `// Built-in middleware to parse incoming JSON
@@ -581,7 +587,7 @@ app.post('/user', (req, res) => {
     duration: 3
   },
   {
-    id: 30,
+    id: 31,
     layout: 'code',
     title: "Route Parameters",
     subtitle: "Dynamic URLs",
@@ -603,7 +609,7 @@ app.get('/search', (req, res) => {
     duration: 4
   },
   {
-    id: 31,
+    id: 32,
     layout: 'diagram',
     title: "Project Structure",
     content: [
@@ -623,7 +629,7 @@ app.get('/search', (req, res) => {
   },
   
   {
-    id: 32,
+    id: 33,
     layout: 'section',
     title: "Module 4",
     subtitle: "MongoDB & Mongoose",
@@ -635,7 +641,7 @@ app.get('/search', (req, res) => {
 
   // --- MODULE 5: MONGODB & MONGOOSE (Slides 36-45) ---
   {
-    id: 33,
+    id: 34,
     layout: 'two-column',
     title: "SQL vs NoSQL",
     columns: {
@@ -665,7 +671,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 34,
+    id: 35,
     layout: 'content',
     title: "MongoDB Atlas",
     content: [
@@ -681,7 +687,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 35,
+    id: 36,
     layout: 'content',
     title: "MongoDB Building Blocks",
     content: [
@@ -695,7 +701,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 36,
+    id: 37,
     layout: 'code',
     title: "Documents & ObjectId",
     subtitle: "A Product document in MongoDB",
@@ -715,7 +721,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 37,
+    id: 38,
     layout: 'two-column',
     title: "Collections in ScaleMetrics",
     columns: {
@@ -743,7 +749,7 @@ app.get('/search', (req, res) => {
     duration: 4
   },
   {
-    id: 38,
+    id: 39,
     layout: 'content',
     title: "Embedded vs Referenced Documents",
     content: [
@@ -757,7 +763,7 @@ app.get('/search', (req, res) => {
     duration: 4
   },
   {
-    id: 39,
+    id: 40,
     layout: 'diagram',
     title: "MongoDB Relationships",
     content: [
@@ -771,7 +777,7 @@ app.get('/search', (req, res) => {
     duration: 4
   },
   {
-    id: 40,
+    id: 41,
     layout: 'content',
     title: "Indexes in MongoDB",
     content: [
@@ -785,7 +791,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 41,
+    id: 42,
     layout: 'two-column',
     title: "Schema Validation Layers",
     columns: {
@@ -811,7 +817,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 42,
+    id: 43,
     layout: 'content',
     title: "Why We Use Mongoose",
     content: [
@@ -825,7 +831,7 @@ app.get('/search', (req, res) => {
     duration: 3
   },
   {
-    id: 43,
+    id: 44,
     layout: 'code',
     title: "Connecting Mongoose",
     subtitle: "config/db.js",
@@ -848,7 +854,7 @@ export const connectDB = async () => {
     duration: 3
   },
   {
-    id: 44,
+    id: 45,
     layout: 'code',
     title: "Defining a Schema",
     subtitle: "models/Product.js (ScaleMetrics)",
@@ -882,7 +888,7 @@ export default Product;`,
     duration: 4
   },
   {
-    id: 45,
+    id: 46,
     layout: 'code',
     title: "Relationships (References) – Specifications",
     code: `// models/Specification.js (ScaleMetrics)
@@ -907,7 +913,7 @@ const specificationSchema = new mongoose.Schema(
     duration: 3
   },
   {
-    id: 46,
+    id: 47,
     layout: 'code',
     title: "Joining Data: Products + Specifications",
     code: `// controllers/productController.js (excerpt) – getProducts
@@ -935,7 +941,7 @@ const productsWithSpecs = products.map((product) => ({
     duration: 4
   },
   {
-    id: 47,
+    id: 48,
     layout: 'section',
     title: "Module 5",
     subtitle: "API Testing & Security",
@@ -947,7 +953,7 @@ const productsWithSpecs = products.map((product) => ({
 
   // --- MODULE 6: API & SECURITY (Slides 46-52) ---
   {
-    id: 48,
+    id: 49,
     layout: 'content',
     title: "Postman: The Developer's Best Friend",
     content: [
@@ -963,7 +969,7 @@ const productsWithSpecs = products.map((product) => ({
     duration: 3
   },
   {
-    id: 49,
+    id: 50,
     layout: 'content',
     title: "HTTP Status Code Cheat Sheet",
     content: [
@@ -987,7 +993,7 @@ const productsWithSpecs = products.map((product) => ({
     duration: 4
   },
   {
-    id: 50,
+    id: 51,
     layout: 'content',
     title: "Authentication vs Authorization",
     content: [
@@ -1000,7 +1006,7 @@ const productsWithSpecs = products.map((product) => ({
     duration: 3
   },
   {
-    id: 51,
+    id: 52,
     layout: 'code',
     title: "Project Setup & Dependencies",
     subtitle: "package.json & core libraries",
@@ -1029,7 +1035,7 @@ const productsWithSpecs = products.map((product) => ({
   },
   
   {
-    id: 52,
+    id: 53,
     layout: 'code',
     title: "Hashing Passwords (Bcrypt)",
     code: `// models/User.js (ScaleMetrics)
@@ -1072,7 +1078,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     duration: 4
   },
   {
-    id: 53,
+    id: 54,
     layout: 'code',
     title: "Generating JWT",
     code: `// controllers/authController.js (ScaleMetrics) – helper
@@ -1091,7 +1097,7 @@ const generateToken = (userId) => {
     duration: 3
   },
   {
-    id: 54,
+    id: 55,
     layout: 'code',
     title: "Protect Middleware",
     code: `// middleware/authMiddleware.js (ScaleMetrics)
@@ -1119,7 +1125,7 @@ export const protect = (req, res, next) => {
     duration: 4
   },
   {
-    id: 55,
+    id: 56,
     layout: 'code',
     title: "Router Module",
     subtitle: "routes/authRoutes.js (ScaleMetrics)",
@@ -1141,7 +1147,7 @@ export default router;`,
     duration: 3
   },
   {
-    id: 56,
+    id: 57,
     layout: 'code',
     title: "Controller Module",
     subtitle: "controllers/authController.js (ScaleMetrics)",
@@ -1211,7 +1217,7 @@ export const loginUser = async (req, res) => {
     duration: 3
   },
   {
-    id: 57,
+    id: 58,
     layout: 'code',
     title: "Error Handling Middleware",
     code: `// Custom Error Handler
@@ -1235,7 +1241,7 @@ app.use(errorHandler);`,
     duration: 4
   },
   {
-    id: 58,
+    id: 59,
     layout: 'code',
     title: "Create Operation",
     subtitle: "controllers/productController.js – createProduct",
@@ -1291,7 +1297,7 @@ export const createProduct = async (req, res) => {
     duration: 3
   },
   {
-    id: 59,
+    id: 60,
     layout: 'code',
     title: "Read Operations",
     subtitle: "controllers/productController.js – getProducts & getProductById",
@@ -1349,7 +1355,7 @@ export const getProductById = async (req, res) => {
     duration: 3
   },
   {
-    id: 60,
+    id: 61,
     layout: 'code',
     title: "Update Operation",
     subtitle: "controllers/productController.js – updateProduct",
@@ -1414,7 +1420,7 @@ export const updateProduct = async (req, res) => {
     duration: 4
   },
   {
-    id: 61,
+    id: 62,
     layout: 'code',
     title: "Delete Operation",
     subtitle: "controllers/productController.js – deleteProduct",
@@ -1439,7 +1445,7 @@ export const deleteProduct = async (req, res) => {
     duration: 3
   },
   {
-    id: 62,
+    id: 63,
     layout: 'section',
     title: "Module 7",
     subtitle: "Live Project: ScaleMetrics Backend",
@@ -1449,7 +1455,7 @@ export const deleteProduct = async (req, res) => {
     duration: 0
   },
   {
-    id: 63,
+    id: 64,
     layout: 'content',
     title: "ScaleMetrics Backend Overview",
     content: [
@@ -1465,7 +1471,7 @@ export const deleteProduct = async (req, res) => {
     duration: 3
   },
   {
-    id: 64,
+    id: 65,
     layout: 'code',
     title: "Step 1: Project Setup & Dependencies",
     subtitle: "package.json & core libraries",
@@ -1493,7 +1499,7 @@ export const deleteProduct = async (req, res) => {
     duration: 5
   },
   {
-    id: 65,
+    id: 66,
     layout: 'code',
     title: "Step 2: server.js – Wiring Express",
     subtitle: "Health check, middleware, routes",
@@ -1538,7 +1544,7 @@ app.listen(PORT, () => {
     duration: 7
   },
   {
-    id: 66,
+    id: 67,
     layout: 'code',
     title: "Step 3: MongoDB Connection & .env",
     subtitle: "config/db.js + environment variables",
@@ -1565,7 +1571,7 @@ export const connectDB = async () => {
     duration: 5
   },
   {
-    id: 67,
+    id: 68,
     layout: 'code',
     title: "Step 4: User Model & Auth Controllers",
     subtitle: "User.js + authController.js",
@@ -1597,7 +1603,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     duration: 7
   },
   {
-    id: 68,
+    id: 69,
     layout: 'code',
     title: "Step 5: Auth Routes & Protect Middleware",
     subtitle: "authRoutes.js + authMiddleware.js",
@@ -1637,7 +1643,7 @@ export const protect = (req, res, next) => {
     duration: 6
   },
   {
-    id: 69,
+    id: 70,
     layout: 'code',
     title: "Step 6: Product & Specification Models",
     subtitle: "Product.js + Specification.js",
@@ -1669,7 +1675,7 @@ const specificationSchema = new mongoose.Schema(
     duration: 5
   },
   {
-    id: 70,
+    id: 71,
     layout: 'code',
     title: "Step 7: Product Controllers & Routes",
     subtitle: "CRUD with Specifications",
@@ -1706,7 +1712,7 @@ export default router;`,
     duration: 7
   },
   {
-    id: 71,
+    id: 73,
     layout: 'content',
     title: "Hands-On Checklist: ScaleMetrics Backend",
     content: [
