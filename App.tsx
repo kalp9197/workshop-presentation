@@ -6,19 +6,26 @@ import { ChevronLeft, ChevronRight, BookOpen, Lightbulb, MessageSquareText } fro
 const App: React.FC = () => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showNotes, setShowNotes] = useState(false);
+  const [jumpInput, setJumpInput] = useState('1');
 
   const currentSlide = slides[currentSlideIndex];
   const progress = ((currentSlideIndex + 1) / slides.length) * 100;
 
+  const goToSlide = (index: number) => {
+    const clampedIndex = Math.max(0, Math.min(slides.length - 1, index));
+    setCurrentSlideIndex(clampedIndex);
+    setJumpInput(String(clampedIndex + 1));
+  };
+
   const nextSlide = () => {
     if (currentSlideIndex < slides.length - 1) {
-      setCurrentSlideIndex(prev => prev + 1);
+      goToSlide(currentSlideIndex + 1);
     }
   };
 
   const prevSlide = () => {
     if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(prev => prev - 1);
+      goToSlide(currentSlideIndex - 1);
     }
   };
 
@@ -94,31 +101,61 @@ const App: React.FC = () => {
               href="https://technotery.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center"
+              className="text-[11px] sm:text-xs font-semibold text-txt-500 hover:text-brand-red transition-colors"
             >
-              <img
-                src="/assets/cropped-Technotery-Logo-512px.png"
-                alt="Technotery"
-                className="h-5 w-5 sm:h-6 sm:w-6"
-              />
+              Technotery
             </a>
             <span className="hidden sm:inline text-[11px] sm:text-xs font-semibold text-txt-400">
               &
             </span>
-            <img
-              src="/assets/infopercept-logo.svg"
-              alt="Infopercept"
-              className="h-4 w-auto sm:h-5 sm:w-auto"
-            />
+            <span className="text-[11px] sm:text-xs font-semibold text-txt-500">
+              Infopercept
+            </span>
           </div>
           <div className="h-3 sm:h-4 w-[1px] bg-surface-300"></div>
-          <div className="text-xs sm:text-sm text-txt-500 flex-shrink-0">
-            {currentSlideIndex + 1} / {slides.length}
+          {/* Inline editable current slide: type number and press Enter */}
+          <div className="text-xs sm:text-sm text-txt-500 flex-shrink-0 flex items-center gap-1">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={jumpInput}
+              onChange={(e) => {
+                // allow only digits
+                const digitsOnly = e.target.value.replace(/\D/g, '');
+                setJumpInput(digitsOnly === '' ? '' : digitsOnly);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const value = Number(jumpInput);
+                  if (!Number.isNaN(value)) {
+                    goToSlide(value - 1);
+                  } else {
+                    // reset to current slide if invalid
+                    setJumpInput(String(currentSlideIndex + 1));
+                  }
+                }
+              }}
+              className="w-6 sm:w-8 bg-transparent border-none outline-none text-center text-xs sm:text-sm text-txt-500"
+            />
+            <span>/ {slides.length}</span>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="absolute bottom-0 left-0 h-0.5 sm:h-1 bg-brand-red transition-all duration-300" style={{ width: `${progress}%` }}></div>
+        {/* Progress Bar with invisible draggable range on top */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <div
+            className="h-0.5 sm:h-1 bg-brand-red transition-all duration-300 pointer-events-none"
+            style={{ width: `${progress}%` }}
+          ></div>
+          <input
+            type="range"
+            min={0}
+            max={slides.length - 1}
+            value={currentSlideIndex}
+            onChange={(e) => goToSlide(Number(e.target.value))}
+            className="absolute inset-0 w-full h-3 opacity-0 cursor-pointer"
+          />
+        </div>
 
         <div className="flex items-center space-x-1 sm:space-x-2">
           <button

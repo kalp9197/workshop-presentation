@@ -1,6 +1,14 @@
 import { SlideData } from './types';
 
 export const slides: SlideData[] = [
+  {
+    id: 0,
+    layout: 'logo',
+    title: '',
+    notes: "Opening splash slide showing only the Technotery logo filling the screen.",
+    takeaway: "",
+    duration: 0
+  },
   // --- MODULE 1: INTRODUCTION (Slides 1-5) ---
   {
     id: 1,
@@ -35,7 +43,7 @@ export const slides: SlideData[] = [
       },
       {
         name: "Kalp Patel",
-        title: "Full Stack JavaScript Engineer",
+        title: "Associate Software Engineer, Technotery",
         experience: "2 years of experience",
         bio: "Full-stack JavaScript engineer working with the MERN stack and data-driven dashboards, passionate about connecting theory with real-world system design.",
         photoUrl: "/assets/Kalp Patel.png",
@@ -49,14 +57,6 @@ export const slides: SlideData[] = [
         photoUrl: "/assets/Jainil Gautambhai Patel.jpeg",
         linkedin: "https://www.google.com/search?q=https://www.linkedin.com/in/jainilpatel14/"
       },
-      {
-        name: "Hitarth Sharma",
-        title: "Full Stack & Frontend Engineer",
-        experience: "2 years of experience",
-        bio: "Frontend-leaning full-stack engineer experienced with React, Node.js, and modern cloud APIs, with a strong focus on developer experience and teaching.",
-        photoUrl: "/assets/Hitarth_sharma.jpeg",
-        linkedin: "https://www.linkedin.com/in/hitarthh/"
-      }
     ],
     notes: "Use this slide to humanize the session before diving into deep technical content. Briefly introduce each instructor: name, focus area (frontend, backend, full stack), and what they will emphasize during the workshop. Keep the tone light and energetic, emphasizing that everyone here actively ships production code and will connect concepts to real-world systems.",
     takeaway: "Learners know who is guiding them and the strengths each instructor brings.",
@@ -1737,6 +1737,15 @@ export default router;`,
     notes: "We have covered the fundamentals of Node, Express, MongoDB, and API Security, and assembled them into a realistic backend project (ScaleMetrics). You now have the engine running plus a complete reference implementation you can extend. The next step in your journey is to build or refine the frontend to consume these APIs. Thank you for your time.",
     takeaway: "You are a Full Stack Developer.",
     duration: 1,
-    visualDesc: "Q&A Session"
+  },
+  {
+    id: 74,
+    layout: 'social-qr',
+    title: "Stay Connected With Technotery",
+    notes:
+      "Closing social media slide. Pause here so participants can scan both QR codes. Mention that we regularly share updates about the tech industry, behind-the-scenes engineering content, and a weekly 'Tricky Tuesday' problem series.",
+    takeaway:
+      "Follow Technotery on LinkedIn and Instagram to keep learning with our weekly Tricky Tuesday posts and tech insights.",
+    duration: 2,
   },
 ];

@@ -88,6 +88,16 @@ const SlideWrapper: React.FC<{
 
 // ─── Layout: Title ────────────────────────────────────────
 
+const LogoIntroLayout: React.FC<Props> = () => (
+  <div className="h-full w-full flex items-center justify-center bg-surface-50">
+    <img
+      src="/assets/Technotery logo - Transparent.png"
+      alt="Technotery"
+      className="w-[85%] max-w-[1200px]"
+    />
+  </div>
+);
+
 const TitleLayout: React.FC<Props> = ({ slide }) => (
   <div className="h-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-20 relative overflow-hidden bg-gradient-to-br from-surface-50 via-surface-100 to-surface-50">
     {/* Subtle geometric pattern */}
@@ -147,7 +157,7 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
         <img
           src="/assets/infopercept-logo.svg"
           alt="Infopercept"
-        className="h-8 sm:h-9 md:h-10 lg:h-11 opacity-80"
+          className="h-8 sm:h-9 md:h-10 lg:h-11 opacity-80"
         />
       </div>
     </div>
@@ -159,11 +169,11 @@ const TitleLayout: React.FC<Props> = ({ slide }) => (
 const PresentersLayout: React.FC<Props> = ({ slide }) => (
   <SlideWrapper slide={slide}>
     <div className="h-full flex flex-col justify-center">
-      <div className="flex flex-wrap justify-center gap-5 px-4 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 px-4 max-w-5xl mx-auto">
         {slide.presenters?.map((presenter) => (
           <div
             key={presenter.name}
-            className="group relative bg-white rounded-2xl p-4 shadow-sm border border-surface-200 hover:shadow-xl hover:-translate-y-1 hover:border-brand-red/20 transition-all duration-300 flex flex-col w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]"
+            className="group relative bg-white rounded-2xl p-4 shadow-sm border border-surface-200 hover:shadow-xl hover:-translate-y-1 hover:border-brand-red/20 transition-all duration-300 flex flex-col w-full"
           >
             {/* LinkedIn Icon (Top Right) */}
             {presenter.linkedin && (
@@ -197,20 +207,20 @@ const PresentersLayout: React.FC<Props> = ({ slide }) => (
               </div>
               
               <div className="w-full mb-3">
-                <h3 className="text-lg font-bold text-txt-900 leading-tight group-hover:text-brand-red transition-colors">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-txt-900 leading-tight group-hover:text-brand-red transition-colors">
                   {presenter.name}
                 </h3>
-                <p className="text-[10px] font-semibold text-txt-500 mt-0.5 uppercase tracking-wide">
+                <p className="text-[11px] sm:text-xs md:text-sm font-semibold text-txt-500 mt-0.5 uppercase tracking-wide">
                   {presenter.title}
                 </p>
                  {presenter.experience && (
-                  <div className="inline-flex items-center mt-1.5 px-2.5 py-0.5 rounded-full bg-surface-100 text-[9px] text-txt-600 font-medium border border-surface-200">
+                  <div className="inline-flex items-center mt-1.5 px-2.5 py-0.5 rounded-full bg-surface-100 text-[10px] sm:text-xs text-txt-600 font-medium border border-surface-200">
                     {presenter.experience}
                   </div>
                 )}
               </div>
 
-              <p className="text-xs text-txt-600 leading-relaxed line-clamp-3">
+              <p className="text-xs sm:text-sm md:text-base text-txt-600 leading-relaxed line-clamp-3">
                 {presenter.bio}
               </p>
             </div>
@@ -642,10 +652,65 @@ const DiagramLayout: React.FC<Props> = ({ slide }) => (
   </SlideWrapper>
 );
 
+// ─── Layout: Social QR ────────────────────────────────────────
+
+const SocialQRLayout: React.FC<Props> = ({ slide }) => (
+  <SlideWrapper slide={slide} showSubtitle={false}>
+    <div className="h-full flex flex-col items-center justify-center gap-6 sm:gap-8 md:gap-10">
+      <div className="text-center max-w-3xl">
+        <p className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-[0.2em] text-brand-red mb-2 sm:mb-3">
+          Stay in the loop
+        </p>
+        <p className="text-sm sm:text-base md:text-lg lg:text-xl font-display font-semibold text-txt-900 leading-relaxed">
+          <span className="font-extrabold">
+            Follow us on social media platforms
+          </span>{' '}
+          to get the latest from the tech industry.
+        </p>
+        <p className="mt-2 sm:mt-3 text-xs sm:text-sm md:text-base text-txt-600">
+          We share a new
+          <span className="font-bold text-txt-900"> Tricky Tuesday </span>
+          challenge every week to sharpen your engineering mindset.
+        </p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 md:gap-14">
+        <div className="flex flex-col items-center gap-2">
+          <div className="bg-white p-2 sm:p-3 rounded-xl shadow-md border border-surface-200">
+            <img
+              src="/assets/technotery_linkedin_qrcode.png"
+              alt="Technotery LinkedIn QR code"
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 object-contain"
+            />
+          </div>
+          <span className="text-xs sm:text-sm md:text-base font-semibold text-txt-700">
+            LinkedIn
+          </span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2">
+          <div className="bg-white p-2 sm:p-3 rounded-xl shadow-md border border-surface-200">
+            <img
+              src="/assets/technotery_instagram_qrcode.png"
+              alt="Technotery Instagram QR code"
+              className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 object-contain"
+            />
+          </div>
+          <span className="text-xs sm:text-sm md:text-base font-semibold text-txt-700">
+            Instagram
+          </span>
+        </div>
+      </div>
+    </div>
+  </SlideWrapper>
+);
+
 // ─── Main Renderer ────────────────────────────────────────
 
 const SlideRenderer: React.FC<Props> = ({ slide }) => {
   switch (slide.layout) {
+    case 'logo':
+      return <LogoIntroLayout slide={slide} />;
     case 'title':
       return <TitleLayout slide={slide} />;
     case 'presenters':
@@ -662,6 +727,8 @@ const SlideRenderer: React.FC<Props> = ({ slide }) => {
       return <CodeLayout slide={slide} />;
     case 'diagram':
       return <DiagramLayout slide={slide} />;
+    case 'social-qr':
+      return <SocialQRLayout slide={slide} />;
     case 'content':
     default:
       return <ContentLayout slide={slide} />;

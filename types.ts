@@ -1,4 +1,5 @@
 export type LayoutType =
+  | 'logo'
   | 'title'
   | 'section'
   | 'content'
@@ -7,7 +8,8 @@ export type LayoutType =
   | 'diagram'
   | 'timeline'
   | 'roadmap'
-  | 'presenters';
+  | 'presenters'
+  | 'social-qr';
 
 export interface SlideData {
   id: number;
