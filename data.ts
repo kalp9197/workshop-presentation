@@ -82,12 +82,12 @@ export const slides: SlideData[] = [
         content: [
           "4. Express.js Architecture",
           "5. MongoDB & Database Design",
-          "6. API Security & Testing",
+          "6. API Security",
         ],
         color: "text-cyan-400"
       }
     },
-    notes: "Walk participants through the roadmap slowly so they see the narrative of the day. Many students try to jump straight into React, but that is like trying to build a roof without walls; you cannot build a robust frontend (the skyscraper) without a solid backend foundation (Node/DB). Emphasize that Part 1 is about mastering the engine and wiring (JavaScript, Node, Express), then Part 2 is about building a polished dashboard on top (React + data at scale). Ask learners to quickly share where they feel weakest so you can pace those sections accordingly.",
+    notes: "This roadmap outlines the full arc of today's workshop. Part 1 covers the foundation: modern JavaScript syntax, asynchronous programming patterns, and Node.js internals—these are the engine and wiring that power every backend. Part 2 builds on top of that: Express.js for API architecture, MongoDB for data persistence, and API security. Think of it like constructing a building—you cannot put up the roof (React frontend) without first having solid walls and plumbing (Node, Express, MongoDB). The reason we start with JavaScript fundamentals instead of jumping straight to React is that Node.js IS JavaScript running on the server, so weak JS skills mean weak backend code.",
     takeaway: "We build from the ground up.",
     duration: 3
   },
@@ -101,7 +101,7 @@ export const slides: SlideData[] = [
       "R - React: The UI Library",
       "N - Node.js: The Runtime Environment"
     ],
-    notes: "Explain that MERN is still one of the most common full-stack combinations in industry because of its consistency. MERN allows for a 'JavaScript everywhere' approach: JSON moves from MongoDB, through Express/Node, and into React without needing conversion into another format, which lowers the barrier to entry and speeds teams up. Briefly mention that while modern meta-frameworks like Next.js exist, understanding the raw MERN pieces first gives a much deeper mental model. Use this slide to anchor vocabulary: whenever you say 'backend' or 'frontend' later, point back to these four boxes.",
+    notes: "MERN stands for MongoDB, Express, React, and Node.js—four technologies that together form one of the most popular full-stack combinations in the industry. The key advantage is the 'JavaScript everywhere' approach: data flows as JSON from MongoDB, through Express and Node on the server, and into React on the client, all in the same language with no format conversion needed. This consistency lowers the learning curve and speeds up development. While modern meta-frameworks like Next.js exist and add features on top, understanding the raw MERN pieces individually gives a much deeper mental model of how web applications actually work. Throughout this workshop, 'backend' refers to the Node + Express + MongoDB side, and 'frontend' refers to the React side.",
     takeaway: "One language. Full Stack.",
     duration: 3
   },
@@ -116,7 +116,7 @@ export const slides: SlideData[] = [
       "3. Database (Mongo) retrieves data.",
       "4. Server sends data back (Response)."
     ],
-    notes: "Everything we do today revolves around this loop; the request–response cycle is the heartbeat of the web. The client 'requests' a resource (like a webpage or user data), and the server 'responds' after doing work and usually talking to a database. Ask students to give real-life examples (opening Instagram, checking bank balance) and map each one to this four-step flow so they can internalize that every feature they build is just a variant of this conversation.",
+    notes: "The request–response cycle is the heartbeat of every web application. Here is how it works in practice: when you open Instagram or check your bank balance, your browser (the Client) sends an HTTP request to a remote server. The server (running Node.js in our case) receives that request, runs the necessary business logic, queries the database (MongoDB) for the relevant data, and then sends a structured response back to the client. Every feature in every web app—login, search, checkout, feed refresh—is just a variation of this four-step conversation. Understanding this cycle deeply is essential because every piece of code we write today plugs into one of these four steps.",
     takeaway: "Request -> Process -> Response.",
     duration: 3
   },
@@ -173,7 +173,7 @@ const log = (msg) => {
   console.log("Log:", msg);
   return true;
 };`,
-    notes: "Arrow functions are not just syntactic sugar to save typing; they also handle the 'this' keyword differently, preserving the context of where they were defined. This becomes a lifesaver when we get to React components, event handlers, and callbacks. In this workshop, we will use arrow functions almost exclusively so that our examples match current best practices and what you see in modern tutorials and codebases.",
+    notes: "Arrow functions (`=>`) provide a shorter syntax for writing functions, but their real power lies in how they handle the `this` keyword. Unlike traditional functions, arrow functions do not create their own `this` context—they inherit `this` from the surrounding scope where they were defined. This behavior is called 'lexical this binding'. In practice, this means you avoid common bugs where `this` unexpectedly changes inside callbacks, event handlers, or nested functions. For example, in React components, arrow functions ensure that `this` always refers to the component instance, preventing errors when handling button clicks or API responses. Throughout this workshop, arrow functions are the default choice, matching modern JavaScript best practices used in production codebases.",
     takeaway: "Modernize your functions.",
     duration: 3
   },
@@ -198,7 +198,7 @@ const log = (msg) => {
 const { name, role } = user;
 
 console.log(name); // Output: "Alice"`,
-    notes: "You will use destructuring constantly in Express and React. When a request comes in, it has a lot of data, but controllers usually only care about specific pieces (like `email` and `password` from `req.body`). Destructuring lets us extract exactly what we need in one readable line, keeping our code concise and reducing the chance of typos when repeatedly writing `object.property` everywhere.",
+    notes: "Destructuring is a way to unpack values from objects (or arrays) into individual variables in a single, clean line. Instead of writing `const name = user.name; const role = user.role;` across multiple lines, destructuring lets you write `const { name, role } = user;` — shorter, more readable, and less error-prone. This pattern appears everywhere in modern JavaScript. In Express, you destructure incoming request data like `const { email, password } = req.body;` to pull out exactly the fields you need. In React, props and state are almost always destructured at the top of a component. The benefit is twofold: your code becomes self-documenting (you can see at a glance which fields are being used), and you avoid repetitive `object.property` chains that are easy to mistype.",
     takeaway: "Extract what you need.",
     duration: 3
   },
@@ -232,7 +232,7 @@ getData(function(a) {
     });
   });
 });`,
-    notes: "This structure is affectionately known as 'callback hell' or the 'pyramid of doom'. It appears whenever you chain many asynchronous operations that depend on each other and nest anonymous functions too deeply. Point out how hard it would be to insert logging, handle errors in the middle, or reuse any of these inner blocks. This pain is exactly why Promises—and later async/await—were invented.",
+    notes: "This deeply nested structure is known as 'callback hell' or the 'pyramid of doom'. It happens when multiple asynchronous operations depend on each other—each one needs the result of the previous one, so the next callback is nested inside the previous callback. The problems are immediate: readability drops because the code drifts further to the right with each level; error handling is nearly impossible because there is no single place to catch failures; debugging is painful because stack traces become cryptic; and reusing any of the inner logic elsewhere requires copy-pasting entire blocks. This pattern was the standard way to write async JavaScript before ES6, and the frustration it caused is exactly why Promises (and later async/await) were invented as cleaner alternatives.",
     takeaway: "Avoid nesting hell.",
     duration: 3
   },
@@ -355,7 +355,7 @@ const processData = async () => {
         color: "text-cyan-400"
       }
     },
-    notes: "Clarify that Node.js is not a new language—it is a runtime environment for running JavaScript outside the browser. It bundles the V8 engine (the same one that powers Chrome) with C++ bindings via Libuv to talk to the operating system. That combination gives JavaScript superpowers it normally doesn't have in the browser, like reading from the file system, opening TCP ports, and running long-lived server processes.",
+    notes: "Node.js is not a new programming language—it is a runtime environment that lets JavaScript run outside the browser, directly on your computer or server. It is built from three key components: (1) The V8 Engine, originally built by Google for Chrome, compiles JavaScript into fast machine code; (2) Libuv, a C++ library, provides the Event Loop and handles asynchronous I/O operations like file reads and network requests behind the scenes; (3) Core Modules like `fs`, `http`, and `path` come built-in and give JavaScript capabilities it never has in the browser—reading and writing files on disk, opening network ports to serve HTTP traffic, and interacting with the operating system (environment variables, process management, etc.). In short, Node.js takes the same JavaScript you already know from the browser and gives it the power to be a full backend server.",
     takeaway: "Node = JS + Power.",
     duration: 3
   },
@@ -369,7 +369,7 @@ const processData = async () => {
       "3. Callback Queue (Holds finished tasks)",
       "4. Event Loop (Checks Stack & Queue)"
     ],
-    notes: "Introduce the event loop as the traffic controller of Node.js. Conceptually, it's a `while(true)` loop that keeps checking: 'Is the call stack empty?' and 'Is there any completed work waiting in the callback queue?'. When the stack is clear, it pulls the next callback from the queue and runs it. This simple but powerful mechanism, combined with non-blocking I/O, is what lets Node handle thousands of concurrent connections on a single thread.",
+    notes: "The Event Loop is the core mechanism that makes Node.js fast despite being single-threaded. Here is how the four pieces work together: (1) The Call Stack is where JavaScript code actually executes, one function at a time; (2) when the code encounters slow operations like reading a file or querying a database, those tasks are handed off to Web APIs / C++ Threads (powered by libuv), freeing the call stack to continue processing other code; (3) once an I/O operation finishes, its callback function is placed into the Callback Queue; (4) the Event Loop continuously checks: 'Is the call stack empty?' If yes, it pulls the next callback from the queue and pushes it onto the stack for execution. This cycle repeats indefinitely—conceptually like a `while(true)` loop. This design is why Node.js can handle thousands of simultaneous connections on a single thread without freezing: it never waits idle for slow operations.",
     takeaway: "Node is Event-Driven.",
     duration: 5
   },
@@ -388,7 +388,7 @@ import fs from 'fs';
 
 export const myFunction = () => { ... };
 export default myFunction;`,
-    notes: "Historically, Node used CommonJS (`require` / `module.exports`) while frontend projects used ES Modules (`import` / `export`), which created a mental split for beginners. Modern tooling and Node versions let us use ES Modules everywhere, which keeps our backend and frontend code visually consistent. Mention that this also unlocks better tree-shaking and tooling support, which becomes important as projects grow.",
+    notes: "JavaScript has two module systems: CommonJS and ES Modules. CommonJS uses `require()` to import and `module.exports` to export—this was the original Node.js way and you will still see it in older codebases and tutorials. ES Modules use `import` and `export` keywords—this is the modern standard used by browsers and frontend tools. To enable ES Modules in a Node.js project, you add `\"type\": \"module\"` to your `package.json`. The advantage of using ES Modules everywhere is consistency: your backend (Node/Express) and frontend (React) code use the exact same import/export syntax, eliminating confusion. ES Modules also enable 'tree-shaking', where bundlers can automatically remove unused code from your final build, resulting in smaller and faster applications.",
     takeaway: "Use modern syntax.",
     duration: 3
   },
@@ -403,7 +403,7 @@ export default myFunction;`,
       "• `package.json` - Your project manifest",
       "• `node_modules` - The heavy folder (Never git commit this!)"
     ],
-    notes: "Explain that modern web development is about assembling reliable building blocks, not hand-writing everything from scratch. If you need to hash a password or validate emails, you reach for an existing, battle-tested package from NPM instead of reinventing it. Use the metaphor that `package.json` is your project blueprint (declaring what tools you need) and `node_modules` is the physical warehouse of installed tools—one that should never be committed to Git.",
+    notes: "NPM (Node Package Manager) is the world's largest software registry, hosting over 2 million packages. Modern web development is about assembling reliable, battle-tested building blocks rather than writing everything from scratch—if you need to hash a password, you install `bcryptjs`; if you need to validate emails, you install `validator`. Here is what each piece does: `npm init` creates a `package.json` file, which acts as your project's blueprint—it lists the project name, version, scripts, and all dependencies. `npm install [package]` downloads a package and its dependencies into the `node_modules` folder. The `node_modules` folder is extremely large (often hundreds of megabytes) and should never be committed to Git; instead, anyone who clones your project runs `npm install` to regenerate it from the `package.json` and `package-lock.json` files.",
     takeaway: "NPM is your toolbox.",
     duration: 3
   },
@@ -423,7 +423,7 @@ const readFileData = async () => {
     console.error("File error:", err);
   }
 };`,
-    notes: "Node ships with a rich set of 'core modules' so you can do useful work without installing anything. `fs` is the file system module, and by importing from `fs/promises` we get a Promise-based API that works cleanly with async/await instead of callback style. As you walk through this example, emphasize always wrapping file I/O in try/catch and handling 'file not found' errors gracefully instead of letting the process crash.",
+    notes: "Node.js ships with built-in 'core modules' that provide essential functionality without needing to install anything from NPM. The `fs` (File System) module is one of the most commonly used—it allows reading, writing, deleting, and manipulating files on the server. By importing from `fs/promises` instead of plain `fs`, we get a Promise-based API that integrates cleanly with async/await syntax. In the example above, `fs.readFile('data.txt', 'utf-8')` reads the entire file content as a UTF-8 string. The `try/catch` block is critical here: file operations can fail for many reasons (file does not exist, permission denied, disk full), and without proper error handling, a single missing file could crash the entire Node.js process. Always handle I/O errors gracefully by logging the error and returning a meaningful response.",
     takeaway: "Node controls files.",
     duration: 3
   },
@@ -462,7 +462,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(5000);`,
-    notes: "This example shows how to create a server using raw Node.js. It works, but you have to manually manage headers, status codes, and sometimes streaming data chunks, which gets verbose and error-prone very quickly. Use this slide to justify why frameworks like Express exist: they wrap this low-level HTTP API in a developer-friendly layer so you can focus on routes and business logic instead of boilerplate.",
+    notes: "This code creates a basic HTTP server using Node's built-in `http` module. When a request arrives, the callback function runs: `res.writeHead(200, {...})` sets the status code and headers manually, `res.write('Hello World')` sends the response body, and `res.end()` signals that the response is complete. The server listens on port 5000. If you run this and visit `http://localhost:5000` in a browser, you will see 'Hello World' displayed. Output in the terminal: nothing visible until a request hits the server. While this works, notice how verbose it is—you have to manually handle headers, status codes, content types, and routing for every single URL. For a real API with dozens of endpoints, this approach becomes unmanageable. This is exactly why Express.js exists: it wraps this low-level HTTP API in a developer-friendly layer with built-in routing, middleware, and response helpers.",
     takeaway: "Know the raw way, use the easy way.",
     duration: 3
   },
@@ -476,7 +476,7 @@ server.listen(5000);`,
       "Install `dotenv` package.",
       "Access via `process.env.VARIABLE_NAME`"
     ],
-    notes: "Security rule #1: if you commit your AWS keys or database passwords to GitHub, assume they are already compromised—bots actively scan public repos for secrets. We use a `.env` file to store sensitive values on the server, and we make sure `.env` is listed in `.gitignore` so it never leaves our machine. Emphasize that in professional teams, secret management gets even more advanced (vaults, secret managers), but `.env` is the essential first step.",
+    notes: "Hardcoding secrets like API keys, database passwords, or JWT secrets directly in your source code is a critical security risk. Automated bots actively scan public GitHub repositories for exposed credentials, and once found, those secrets can be exploited within minutes. The solution is environment variables: store sensitive values in a `.env` file at the root of your project, then access them in code via `process.env.VARIABLE_NAME`. For example, your MongoDB connection string goes in `.env` as `MONGO_URI=mongodb+srv://...` and you read it with `process.env.MONGO_URI`. The `.env` file must be added to `.gitignore` so it is never pushed to version control. To read `.env` files in Node.js, install the `dotenv` package and call `dotenv.config()` at the top of your entry file. In professional environments, teams use dedicated secret managers (like AWS Secrets Manager or HashiCorp Vault), but `.env` files are the essential first step for any project.",
     takeaway: "Security First.",
     duration: 3
   },
@@ -486,7 +486,7 @@ server.listen(5000);`,
     title: "Module 3",
     subtitle: "Express.js Framework",
     sectionTitle: "Building the Backend",
-    notes: "Node is the low-level engine, but Express is the chassis that makes building APIs fast, organized, and pleasant. Use this module intro to reset expectations: from here on, almost every slide connects directly to files we would create in a real backend project. Let students know that the patterns they see—routes, controllers, middleware—match how production Express apps are structured.",
+    notes: "Up to this point, we have covered JavaScript fundamentals and Node.js internals—the language and the runtime engine. Now we move to Express.js, the framework that sits on top of Node and makes building web APIs fast, organized, and maintainable. Think of Node as the car engine and Express as the steering wheel, dashboard, and pedals—it gives you a clean interface to control the engine's power. From this module onward, every concept—routes, controllers, middleware—maps directly to files and patterns used in real production backend projects.",
     takeaway: "Server Architecture",
     duration: 0
   },

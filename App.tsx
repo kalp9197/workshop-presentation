@@ -62,7 +62,7 @@ const App: React.FC = () => {
                 <MessageSquareText className="w-3.5 h-3.5 text-brand-red flex-shrink-0" />
                 <p className="text-[10px] sm:text-xs text-brand-red font-bold uppercase tracking-wider">Notes</p>
               </div>
-              <p className="text-txt-700 text-xs sm:text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+              <p className="text-txt-500 text-[10px] sm:text-xs md:text-sm leading-relaxed whitespace-pre-wrap">
                 {currentSlide.notes}
               </p>
 
